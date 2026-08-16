@@ -68,7 +68,11 @@ export default async function PublicProfilePage({
       <section className="relative h-[78vh] min-h-[420px] overflow-hidden bg-surface">
         {image ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={image} alt={name} className="h-full w-full object-cover" />
+          <img
+            src={image}
+            alt={name}
+            className="h-full w-full object-cover object-[62%_center]"
+          />
         ) : (
           <div className="h-full w-full bg-[radial-gradient(circle_at_30%_20%,#0000ff,transparent_45%),#111]" />
         )}

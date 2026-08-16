@@ -11,6 +11,7 @@ import {
   isReservedSlug,
   kgToLbs,
   lbsToKg,
+  photoUrl,
   slugifyName,
 } from "@/lib/utils";
 
@@ -130,10 +131,7 @@ export function ProfileEditor({
             {preview || profile.photo_path ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
-                src={
-                  preview ||
-                  `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/avatars/${profile.photo_path}`
-                }
+                src={preview || photoUrl(profile.photo_path) || ""}
                 alt=""
                 className="h-full w-full object-cover"
               />

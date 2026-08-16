@@ -44,6 +44,9 @@ export function displayName(first: string, last: string) {
 
 export function photoUrl(path: string | null | undefined) {
   if (!path) return null;
+  if (path.startsWith("http://") || path.startsWith("https://") || path.startsWith("/")) {
+    return path;
+  }
   const base = process.env.NEXT_PUBLIC_SUPABASE_URL;
   if (!base) return null;
   return `${base}/storage/v1/object/public/avatars/${path}`;

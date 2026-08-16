@@ -5,12 +5,14 @@ import type { RaceEvent } from "@/lib/types";
 import { formatEventDate, isUpcoming } from "@/lib/utils";
 
 export function ProfileEvents({ events }: { events: RaceEvent[] }) {
-  const [tab, setTab] = useState<"upcoming" | "past">("upcoming");
   const upcoming = events.filter((event) => isUpcoming(event.event_date));
   const past = events
     .filter((event) => !isUpcoming(event.event_date))
     .slice()
     .reverse();
+  const [tab, setTab] = useState<"upcoming" | "past">(
+    upcoming.length ? "upcoming" : "past",
+  );
   const visible = tab === "upcoming" ? upcoming : past;
 
   return (
