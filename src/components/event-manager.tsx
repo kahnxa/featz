@@ -42,6 +42,7 @@ export function EventManager({
   }
 
   async function removeEvent(id: string) {
+    if (!window.confirm("Delete this race?")) return;
     const supabase = createClient();
     await supabase.from("events").delete().eq("id", id);
     router.refresh();
@@ -51,10 +52,29 @@ export function EventManager({
     <div className="space-y-10">
       <form action={addEvent} className="space-y-3">
         <p className="eyebrow">Add a race</p>
-        <input className="field" name="title" required placeholder="Event title" />
+        <input
+          className="field"
+          name="title"
+          required
+          placeholder="Event title"
+          autoCapitalize="words"
+        />
         <input className="field" name="event_date" required type="date" />
-        <input className="field" name="position" placeholder="Position (past only)" />
-        <input className="field" name="result" placeholder="Result / time (past only)" />
+        <input
+          className="field"
+          name="position"
+          placeholder="Position (past only)"
+          autoCapitalize="none"
+        />
+        <input
+          className="field"
+          name="result"
+          placeholder="Result / time (past only)"
+          autoCapitalize="none"
+          autoCorrect="off"
+          spellCheck={false}
+          inputMode="decimal"
+        />
         {error ? <p className="text-sm text-red-400">{error}</p> : null}
         <button className="btn btn-accent h-12 w-full text-sm" type="submit">
           Add event
@@ -89,10 +109,12 @@ function EventList({
           {items.map((event) => (
             <li
               key={event.id}
-              className="flex items-start justify-between gap-4 rounded-2xl bg-surface p-4"
+              className="flex items-start justify-between gap-3 rounded-2xl bg-surface p-4"
             >
-              <div>
-                <p className="text-lg font-medium uppercase">{event.title}</p>
+              <div className="min-w-0">
+                <p className="text-lg font-medium uppercase leading-tight break-words">
+                  {event.title}
+                </p>
                 <p className="eyebrow mt-1">{formatEventDate(event.event_date)}</p>
                 {event.position || event.result ? (
                   <p className="mt-2 text-sm uppercase tracking-widest text-accent">
@@ -101,7 +123,7 @@ function EventList({
                 ) : null}
               </div>
               <button
-                className="eyebrow text-white"
+                className="inline-flex min-h-11 shrink-0 items-center px-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-white"
                 type="button"
                 onClick={() => onRemove(event.id)}
               >

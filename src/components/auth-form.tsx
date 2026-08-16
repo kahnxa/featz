@@ -53,6 +53,10 @@ export function AuthForm({
         required
         placeholder="Email"
         autoComplete="email"
+        autoCapitalize="none"
+        autoCorrect="off"
+        spellCheck={false}
+        inputMode="email"
       />
       <input
         className="field"
@@ -62,6 +66,9 @@ export function AuthForm({
         minLength={6}
         placeholder="Password"
         autoComplete={mode === "signup" ? "new-password" : "current-password"}
+        autoCapitalize="none"
+        autoCorrect="off"
+        spellCheck={false}
       />
       {error ? <p className="text-sm text-red-400">{error}</p> : null}
       <button

@@ -40,11 +40,11 @@ export default async function OnboardingPage() {
   if (profile.onboarding_completed_at) redirect("/dashboard");
 
   return (
-    <div className="flex min-h-full flex-col">
+    <div className="flex min-h-dvh flex-col">
       <SiteHeader user={user} />
-      <main className="mx-auto w-full max-w-lg flex-1 px-5 pb-20 pt-28">
+      <main className="mx-auto w-full max-w-lg flex-1 px-[max(1.25rem,env(safe-area-inset-left))] pb-[max(5rem,env(safe-area-inset-bottom))] pr-[max(1.25rem,env(safe-area-inset-right))] pt-[calc(7rem+env(safe-area-inset-top))]">
         <p className="eyebrow">Onboarding</p>
-        <h1 className="mt-3 text-4xl font-medium uppercase tracking-tight">
+        <h1 className="mt-3 text-[clamp(2rem,9vw,2.5rem)] font-medium uppercase tracking-tight">
           Build your resume
         </h1>
         <p className="mt-3 text-muted">

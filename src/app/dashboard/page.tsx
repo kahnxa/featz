@@ -28,17 +28,17 @@ export default async function DashboardPage() {
     .order("event_date", { ascending: true });
 
   return (
-    <div className="flex min-h-full flex-col">
+    <div className="flex min-h-dvh flex-col">
       <SiteHeader user={user} />
-      <main className="mx-auto w-full max-w-lg flex-1 space-y-16 px-5 pb-20 pt-28">
+      <main className="mx-auto w-full max-w-lg flex-1 space-y-16 px-[max(1.25rem,env(safe-area-inset-left))] pb-[max(5rem,env(safe-area-inset-bottom))] pr-[max(1.25rem,env(safe-area-inset-right))] pt-[calc(7rem+env(safe-area-inset-top))]">
         <section>
           <p className="eyebrow">Your page</p>
-          <h1 className="mt-3 text-4xl font-medium uppercase tracking-tight">
+          <h1 className="mt-3 text-[clamp(2rem,9vw,2.5rem)] font-medium uppercase tracking-tight">
             Dashboard
           </h1>
           <Link
             href={`/${profile.slug}`}
-            className="mt-4 inline-block text-sm uppercase tracking-widest text-accent"
+            className="mt-4 inline-flex min-h-11 items-center text-sm uppercase tracking-widest text-accent"
           >
             View live page →
           </Link>

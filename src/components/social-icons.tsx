@@ -20,7 +20,7 @@ function IconLink({
       target="_blank"
       rel="noreferrer"
       aria-label={label}
-      className="grid h-11 w-11 place-items-center text-white transition-opacity hover:opacity-70"
+      className="grid h-12 w-12 place-items-center text-white transition-opacity hover:opacity-70"
     >
       {children}
     </a>
@@ -63,5 +63,9 @@ export function SocialIcons({ profile }: { profile: Socials }) {
 
   if (!items.length) return null;
 
-  return <div className="flex items-center justify-center gap-3 py-8">{items}</div>;
+  return (
+    <div className="flex items-center justify-center gap-1 py-6 sm:gap-3 sm:py-8">
+      {items}
+    </div>
+  );
 }

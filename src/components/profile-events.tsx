@@ -16,25 +16,27 @@ export function ProfileEvents({ events }: { events: RaceEvent[] }) {
   const visible = tab === "upcoming" ? upcoming : past;
 
   return (
-    <section className="px-4 pb-16">
+    <section className="pl-[max(1rem,env(safe-area-inset-left))] pr-[max(1rem,env(safe-area-inset-right))] pb-16">
       <div className="grid grid-cols-2 gap-2">
         <button
-          className={`h-12 rounded-xl text-[13px] font-semibold uppercase tracking-widest ${
+          className={`flex min-h-12 items-center justify-center rounded-xl px-2 text-center text-[11px] font-semibold uppercase leading-tight tracking-[0.14em] sm:text-[13px] sm:tracking-widest ${
             tab === "upcoming" ? "bg-accent text-white" : "bg-surface-2 text-white"
           }`}
           type="button"
           onClick={() => setTab("upcoming")}
         >
-          Upcoming events
+          <span className="sm:hidden">Upcoming</span>
+          <span className="hidden sm:inline">Upcoming events</span>
         </button>
         <button
-          className={`h-12 rounded-xl text-[13px] font-semibold uppercase tracking-widest ${
+          className={`flex min-h-12 items-center justify-center rounded-xl px-2 text-center text-[11px] font-semibold uppercase leading-tight tracking-[0.14em] sm:text-[13px] sm:tracking-widest ${
             tab === "past" ? "bg-accent text-white" : "bg-surface-2 text-white"
           }`}
           type="button"
           onClick={() => setTab("past")}
         >
-          Past results
+          <span className="sm:hidden">Past</span>
+          <span className="hidden sm:inline">Past results</span>
         </button>
       </div>
       <p className="eyebrow mt-6">
@@ -45,8 +47,8 @@ export function ProfileEvents({ events }: { events: RaceEvent[] }) {
           <li className="rounded-2xl bg-surface p-5 text-muted">Nothing here yet.</li>
         ) : (
           visible.map((event) => (
-            <li key={event.id} className="rounded-2xl bg-white p-5 text-black">
-              <p className="text-xl font-semibold uppercase leading-tight">
+            <li key={event.id} className="rounded-2xl bg-white p-4 text-black sm:p-5">
+              <p className="text-lg font-semibold uppercase leading-tight break-words sm:text-xl">
                 {event.title}
               </p>
               <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.18em] text-black/50">

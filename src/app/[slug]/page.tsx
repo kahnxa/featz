@@ -63,28 +63,29 @@ export default async function PublicProfilePage({
   const isOwner = user?.id === typed.id;
 
   return (
-    <div className="flex min-h-full flex-col">
+    <div className="flex min-h-dvh flex-col">
       <SiteHeader user={user} />
-      <section className="relative h-[78vh] min-h-[420px] overflow-hidden bg-surface">
+      <section className="relative h-[70dvh] min-h-[360px] overflow-hidden bg-surface sm:h-[78dvh] sm:min-h-[420px]">
         {image ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={image}
             alt={name}
+            fetchPriority="high"
             className="h-full w-full object-cover object-[62%_center]"
           />
         ) : (
           <div className="h-full w-full bg-[radial-gradient(circle_at_30%_20%,#0000ff,transparent_45%),#111]" />
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-black/10" />
-        <div className="absolute inset-x-0 bottom-14 flex items-end justify-between px-5">
-          <h1 className="max-w-[80%] text-4xl font-medium uppercase leading-[0.9] tracking-tight sm:text-6xl">
+        <div className="absolute inset-x-0 bottom-14 flex items-end justify-between gap-3 pl-[max(1.25rem,env(safe-area-inset-left))] pr-[max(1.25rem,env(safe-area-inset-right))]">
+          <h1 className="min-w-0 flex-1 text-[clamp(2rem,9vw,3.75rem)] font-medium uppercase leading-[0.9] tracking-tight">
             {name}
           </h1>
           <ShareButton slug={typed.slug} />
         </div>
-        <div className="absolute inset-x-0 bottom-0 flex h-10 items-center justify-center bg-black/70">
-          <p className="eyebrow text-white">
+        <div className="absolute inset-x-0 bottom-0 flex min-h-10 items-center justify-center bg-black/70 px-3 py-2">
+          <p className="eyebrow max-w-full truncate text-center text-white">
             {nextRace
               ? `Next · ${nextRace.title} · ${formatEventDate(nextRace.event_date)}`
               : typed.sport
@@ -95,10 +96,10 @@ export default async function PublicProfilePage({
       </section>
       <SocialIcons profile={typed} />
       {isOwner ? (
-        <div className="px-4 pb-4">
+        <div className="px-[max(1rem,env(safe-area-inset-left))] pb-4 pr-[max(1rem,env(safe-area-inset-right))]">
           <Link
             href="/dashboard"
-            className="btn btn-ghost flex h-11 w-full text-[12px]"
+            className="btn btn-ghost flex h-12 w-full text-[12px]"
           >
             Edit your page
           </Link>

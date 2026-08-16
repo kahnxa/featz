@@ -3,7 +3,7 @@ import Link from "next/link";
 export function SiteMark({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
   const text =
     size === "lg"
-      ? "text-7xl sm:text-8xl tracking-tight"
+      ? "text-6xl tracking-tight sm:text-8xl"
       : size === "sm"
         ? "text-[17px] tracking-tight"
         : "text-[18px] tracking-tight";

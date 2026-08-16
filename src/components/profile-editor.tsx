@@ -127,16 +127,16 @@ export function ProfileEditor({
       <section className="space-y-3">
         <p className="eyebrow">Photo</p>
         <label className="block cursor-pointer overflow-hidden rounded-2xl bg-surface">
-          <div className="aspect-[4/5] bg-surface-2">
+          <div className="aspect-[4/5] max-h-[min(70dvh,28rem)] bg-surface-2">
             {preview || profile.photo_path ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={preview || photoUrl(profile.photo_path) || ""}
                 alt=""
-                className="h-full w-full object-cover"
+                className="h-full w-full object-cover object-[62%_center]"
               />
             ) : (
-              <div className="grid h-full place-items-center text-muted">
+              <div className="grid h-full place-items-center px-6 text-center text-muted">
                 Tap to upload
               </div>
             )}
@@ -148,6 +148,7 @@ export function ProfileEditor({
             onChange={(event) => setPhotoFile(event.target.files?.[0] || null)}
           />
         </label>
+        <p className="eyebrow">Tap photo to change</p>
       </section>
 
       <section className="grid gap-3 sm:grid-cols-2">
@@ -157,6 +158,8 @@ export function ProfileEditor({
           required
           defaultValue={profile.first_name}
           placeholder="First name"
+          autoComplete="given-name"
+          autoCapitalize="words"
         />
         <input
           className="field"
@@ -164,11 +167,14 @@ export function ProfileEditor({
           required
           defaultValue={profile.last_name}
           placeholder="Last name"
+          autoComplete="family-name"
+          autoCapitalize="words"
         />
         <input
           className="field"
           name="age"
           type="number"
+          inputMode="numeric"
           min={8}
           max={100}
           required
@@ -192,14 +198,17 @@ export function ProfileEditor({
           name="slug"
           defaultValue={profile.slug.startsWith("user-") ? "" : profile.slug}
           placeholder="Page URL (optional)"
+          autoCapitalize="none"
+          autoCorrect="off"
+          spellCheck={false}
         />
       </section>
 
       <section>
-        <div className="mb-3 flex items-center justify-between">
+        <div className="mb-3 flex items-center justify-between gap-3">
           <p className="eyebrow">Body</p>
           <button
-            className="eyebrow text-white"
+            className="inline-flex min-h-11 items-center text-[11px] font-semibold uppercase tracking-[0.14em] text-white"
             type="button"
             onClick={() => setImperial((value) => !value)}
           >
@@ -207,11 +216,12 @@ export function ProfileEditor({
           </button>
         </div>
         {imperial ? (
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-3 gap-2 sm:gap-3">
             <input
               className="field"
               name="feet"
               type="number"
+              inputMode="numeric"
               min={3}
               max={8}
               defaultValue={initialHeight.feet}
@@ -221,6 +231,7 @@ export function ProfileEditor({
               className="field"
               name="inches"
               type="number"
+              inputMode="numeric"
               min={0}
               max={11}
               defaultValue={initialHeight.inches}
@@ -230,6 +241,7 @@ export function ProfileEditor({
               className="field"
               name="lbs"
               type="number"
+              inputMode="numeric"
               min={50}
               max={500}
               defaultValue={profile.weight_kg ? kgToLbs(profile.weight_kg) : ""}
@@ -242,6 +254,7 @@ export function ProfileEditor({
               className="field"
               name="height_cm"
               type="number"
+              inputMode="decimal"
               defaultValue={profile.height_cm ?? ""}
               placeholder="Height cm"
             />
@@ -249,6 +262,7 @@ export function ProfileEditor({
               className="field"
               name="weight_kg"
               type="number"
+              inputMode="decimal"
               defaultValue={profile.weight_kg ?? ""}
               placeholder="Weight kg"
             />
@@ -261,31 +275,51 @@ export function ProfileEditor({
         <input
           className="field"
           name="instagram_url"
+          inputMode="url"
           defaultValue={profile.instagram_url ?? ""}
           placeholder="Instagram URL"
+          autoCapitalize="none"
+          autoCorrect="off"
+          spellCheck={false}
         />
         <input
           className="field"
           name="youtube_url"
+          inputMode="url"
           defaultValue={profile.youtube_url ?? ""}
           placeholder="YouTube URL"
+          autoCapitalize="none"
+          autoCorrect="off"
+          spellCheck={false}
         />
         <input
           className="field"
           name="tiktok_url"
+          inputMode="url"
           defaultValue={profile.tiktok_url ?? ""}
           placeholder="TikTok URL"
+          autoCapitalize="none"
+          autoCorrect="off"
+          spellCheck={false}
         />
         <input
           className="field"
           name="strava_url"
+          inputMode="url"
           defaultValue={profile.strava_url ?? ""}
           placeholder="Strava URL"
+          autoCapitalize="none"
+          autoCorrect="off"
+          spellCheck={false}
         />
       </section>
 
       {error ? <p className="text-sm text-red-400">{error}</p> : null}
-      <button className="btn btn-accent h-12 w-full text-sm" disabled={pending}>
+      <button
+        className="btn btn-accent h-12 w-full text-sm"
+        disabled={pending}
+        type="submit"
+      >
         {pending
           ? "Saving..."
           : mode === "onboarding"

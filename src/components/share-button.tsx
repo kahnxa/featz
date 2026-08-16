@@ -5,18 +5,32 @@ import { useState } from "react";
 export function ShareButton({ slug }: { slug: string }) {
   const [copied, setCopied] = useState(false);
 
-  async function copy() {
+  async function share() {
     const url = `${window.location.origin}/${slug}`;
-    await navigator.clipboard.writeText(url);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1600);
+
+    try {
+      if (typeof navigator.share === "function") {
+        await navigator.share({ url, title: "featz" });
+        return;
+      }
+    } catch (error) {
+      if (error instanceof DOMException && error.name === "AbortError") return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1600);
+    } catch {
+      window.prompt("Copy this link", url);
+    }
   }
 
   return (
     <button
       type="button"
-      onClick={copy}
-      className="grid h-10 w-10 place-items-center rounded-lg bg-black/55 text-white backdrop-blur-md"
+      onClick={share}
+      className="grid h-11 w-11 shrink-0 place-items-center rounded-lg bg-black/55 text-white backdrop-blur-md"
       aria-label="Share profile"
     >
       {copied ? (

@@ -10,30 +10,30 @@ export default async function Home() {
   } = await supabase.auth.getUser();
 
   return (
-    <div className="flex min-h-full flex-col">
+    <div className="flex min-h-dvh flex-col">
       <SiteHeader user={user} />
-      <main className="relative flex flex-1 flex-col justify-end px-5 pb-16 pt-36 sm:px-8 sm:pt-44">
+      <main className="relative flex flex-1 flex-col justify-end pb-12 pl-[max(1.25rem,env(safe-area-inset-left))] pr-[max(1.25rem,env(safe-area-inset-right))] pt-[calc(8rem+env(safe-area-inset-top))] sm:pb-16 sm:pl-[max(2rem,env(safe-area-inset-left))] sm:pr-[max(2rem,env(safe-area-inset-right))] sm:pt-44">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(1200px_circle_at_20%_0%,rgba(0,0,255,0.28),transparent_55%)]" />
         <p className="eyebrow relative">For runners, cyclists, and triathletes</p>
-        <h1 className="relative mt-5 max-w-3xl text-5xl font-medium uppercase leading-[0.92] tracking-tight sm:text-7xl">
+        <h1 className="relative mt-5 max-w-3xl text-[clamp(2.6rem,12vw,4.5rem)] font-medium uppercase leading-[0.92] tracking-tight sm:text-7xl">
           Your races.
           <br />
           Your record.
         </h1>
-        <p className="relative mt-6 max-w-md text-lg text-muted">
+        <p className="relative mt-6 max-w-md text-[17px] leading-relaxed text-muted sm:text-lg">
           A public page for the events you have coming up and the results you
           want people to see.
         </p>
         <div className="relative mt-10 flex flex-col gap-3 sm:flex-row">
           <Link
             href="/signup"
-            className="btn btn-accent h-14 px-8 text-sm sm:min-w-56"
+            className="btn btn-accent h-14 w-full px-8 text-sm sm:min-w-56 sm:w-auto"
           >
             Create your page
           </Link>
           <Link
             href="/login"
-            className="btn btn-ghost h-14 px-8 text-sm sm:min-w-40"
+            className="btn btn-ghost h-14 w-full px-8 text-sm sm:min-w-40 sm:w-auto"
           >
             Log in
           </Link>
