@@ -62,6 +62,11 @@ export function SiteHeader({
           </>
         ) : (
           <>
+            {pathname !== "/for-athletes" ? (
+              <Link href="/for-athletes" className={`${navLink} hidden sm:inline-flex`}>
+                For athletes
+              </Link>
+            ) : null}
             <Link href="/login" className={navLink}>
               Log in
             </Link>

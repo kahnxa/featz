@@ -13,6 +13,9 @@ export const RESERVED_SLUGS = [
   "admin",
   "forgot-password",
   "reset-password",
+  "for-athletes",
+  "terms-of-service",
+  "privacy-policy",
 ] as const;
 
 export type Profile = {
