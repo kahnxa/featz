@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { PhotoCarousel } from "@/components/photo-carousel";
 import { ProfileEvents } from "@/components/profile-events";
 import { ShareButton } from "@/components/share-button";
 import { SiteFooter } from "@/components/site-footer";
@@ -103,18 +104,7 @@ export default async function PublicProfilePage({
         <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-3 rounded-lg bg-[rgba(31,30,28,0.5)] p-2 backdrop-blur-[40px] sm:gap-4">
           <section className="relative h-[360px] overflow-hidden rounded-lg bg-surface sm:h-[400px] sm:w-fit sm:max-w-full sm:self-start">
             {photos.length ? (
-              <div className="flex h-full snap-x snap-mandatory gap-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-                {photos.map((src, index) => (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    key={src}
-                    src={src}
-                    alt={index === 0 ? name : ""}
-                    fetchPriority={index === 0 ? "high" : "auto"}
-                    className="h-full w-full flex-none snap-start rounded-lg object-cover object-center sm:w-auto sm:max-w-[min(80vw,640px)]"
-                  />
-                ))}
-              </div>
+              <PhotoCarousel photos={photos} name={name} />
             ) : (
               <div className="h-full w-full bg-[radial-gradient(circle_at_30%_20%,#0000ff,transparent_45%),#1f1e1c] sm:aspect-[4/5]" />
             )}
