@@ -81,7 +81,7 @@ export function ProfileEvents({
           NOTHING HERE YET.
         </p>
       ) : (
-        <ul className="flex snap-x gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <ul className="flex flex-col gap-2">
           {visible.map((event) => {
             const body = (
               <>
@@ -102,10 +102,7 @@ export function ProfileEvents({
             );
 
             return (
-              <li
-                key={event.id}
-                className="w-[calc(50%-4px)] flex-none snap-start sm:w-[280px]"
-              >
+              <li key={event.id} className="w-full">
                 {event.event_url ? (
                   <a
                     href={event.event_url}
