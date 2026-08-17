@@ -23,7 +23,7 @@ function SampleCard() {
           </p>
         </div>
       </div>
-      <div className="absolute left-5 top-5 w-[240px] rounded-lg bg-white p-4 text-[#1f1e1c] shadow-[0_16px_40px_rgba(0,0,0,0.45)]">
+      <div className="absolute right-5 top-5 w-[240px] rounded-lg bg-white p-4 text-[#1f1e1c] shadow-[0_16px_40px_rgba(0,0,0,0.45)]">
         <p className="text-[15px] font-bold uppercase leading-5">
           Austin Marathon
         </p>
