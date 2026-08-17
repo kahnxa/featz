@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 import { photoUrl } from "@/lib/utils";
 
 export const alt = "featz athlete page";
-export const size = { width: 1200, height: 1200 };
+export const size = { width: 1200, height: 1000 };
 export const contentType = "image/png";
 
 export default async function OpengraphImage({
@@ -54,7 +54,7 @@ export default async function OpengraphImage({
             src={photo}
             alt=""
             width={1200}
-            height={1200}
+            height={1000}
             style={{ width: "100%", height: "100%", objectFit: "cover" }}
           />
         ) : null}
