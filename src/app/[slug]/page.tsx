@@ -82,41 +82,53 @@ export default async function PublicProfilePage({
   const image = photoUrl(typed.photo_path);
   const name = displayName(typed.first_name, typed.last_name);
   const isOwner = user?.id === typed.id;
+  const nextRaceLabel = nextRace
+    ? `Next · ${nextRace.title} · ${formatEventDate(nextRace.event_date)}`
+    : typed.sport
+      ? typed.sport
+      : "Endurance";
 
   return (
     <div className="flex min-h-dvh flex-col">
       <SiteHeader user={user} />
       <main className="flex-1 pb-[100px] sm:pb-[120px]">
         <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-3 rounded-lg bg-[rgba(31,30,28,0.5)] p-2 backdrop-blur-[40px] sm:gap-4">
-          <section className="relative h-[360px] overflow-hidden rounded-lg bg-surface sm:aspect-[1424/400] sm:h-auto sm:min-h-[320px]">
+          <section className="relative h-[360px] overflow-hidden rounded-lg bg-surface sm:h-[400px] sm:w-fit sm:max-w-full sm:self-start">
             {image ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={image}
                 alt={name}
                 fetchPriority="high"
-                className="h-full w-full object-cover object-center"
+                className="h-full w-full object-cover object-center sm:w-auto sm:max-w-[min(80vw,640px)]"
               />
             ) : (
-              <div className="h-full w-full bg-[radial-gradient(circle_at_30%_20%,#0000ff,transparent_45%),#1f1e1c]" />
+              <div className="h-full w-full bg-[radial-gradient(circle_at_30%_20%,#0000ff,transparent_45%),#1f1e1c] sm:aspect-[4/5]" />
             )}
-            <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0)_60%,rgba(0,0,0,0.5)_100%)]" />
-            <div className="absolute inset-0 flex flex-col justify-end gap-4 p-4 pb-7 sm:p-6">
+            <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0)_60%,rgba(0,0,0,0.5)_100%)] sm:hidden" />
+            <div className="absolute inset-0 flex flex-col justify-end gap-4 p-4 pb-7 sm:hidden">
               <div className="flex items-center gap-3">
-                <h1 className="min-w-0 font-display text-[32px] font-bold uppercase leading-none tracking-[-0.0104em] sm:text-[clamp(32px,4vw,56px)]">
+                <h1 className="min-w-0 font-display text-[32px] font-bold uppercase leading-none tracking-[-0.0104em]">
                   {name}
                 </h1>
                 <ShareButton slug={typed.slug} />
               </div>
               <p className="max-w-full self-start truncate rounded-md bg-[rgba(67,60,60,0.5)] px-2.5 py-1 font-mono text-[12px] uppercase leading-[18px] tracking-[0.0857em] backdrop-blur-[40px]">
-                {nextRace
-                  ? `Next · ${nextRace.title} · ${formatEventDate(nextRace.event_date)}`
-                  : typed.sport
-                    ? typed.sport
-                    : "Endurance"}
+                {nextRaceLabel}
               </p>
             </div>
           </section>
+          <div className="hidden flex-col gap-4 px-1 sm:flex">
+            <div className="flex items-center gap-3">
+              <h1 className="min-w-0 font-display text-[clamp(32px,4vw,56px)] font-bold uppercase leading-none tracking-[-0.0104em]">
+                {name}
+              </h1>
+              <ShareButton slug={typed.slug} />
+            </div>
+            <p className="max-w-full self-start truncate rounded-md bg-[rgba(67,60,60,0.5)] px-2.5 py-1 font-mono text-[12px] uppercase leading-[18px] tracking-[0.0857em] backdrop-blur-[40px]">
+              {nextRaceLabel}
+            </p>
+          </div>
           <SocialIcons profile={typed} />
           {isOwner ? (
             <Link href="/dashboard" className="btn btn-ghost h-12 w-full text-[12px]">

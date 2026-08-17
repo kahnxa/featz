@@ -64,7 +64,10 @@ export function SocialIcons({ profile }: { profile: Socials }) {
   if (!items.length) return null;
 
   return (
-    <div className="flex flex-wrap items-center justify-center gap-4 py-2" aria-label="Social links">
+    <div
+      className="flex flex-wrap items-center justify-center gap-4 py-2 sm:justify-start sm:px-1"
+      aria-label="Social links"
+    >
       {items}
     </div>
   );
