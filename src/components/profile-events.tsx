@@ -53,9 +53,6 @@ export function ProfileEvents({ events }: { events: RaceEvent[] }) {
             Past results
           </button>
         </div>
-        <span className="eyebrow">
-          {visible.length} {tab === "upcoming" ? "events upcoming" : "results total"}
-        </span>
       </div>
       {visible.length === 0 ? (
         <p className="py-16 text-center font-mono text-[14px] text-text/60">

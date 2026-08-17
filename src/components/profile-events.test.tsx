@@ -82,7 +82,6 @@ describe("ProfileEvents", () => {
 
     expect(screen.getByText("Past Marathon")).toBeInTheDocument();
     expect(screen.getByText("3rd AG · 04:26:54")).toBeInTheDocument();
-    expect(screen.getByText(/1 results total/i)).toBeInTheDocument();
   });
 
   it("shows newest past events first", async () => {

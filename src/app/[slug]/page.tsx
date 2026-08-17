@@ -95,7 +95,7 @@ export default async function PublicProfilePage({
                 src={image}
                 alt={name}
                 fetchPriority="high"
-                className="h-full w-full object-cover object-top"
+                className="h-full w-full object-cover object-center"
               />
             ) : (
               <div className="h-full w-full bg-[radial-gradient(circle_at_30%_20%,#0000ff,transparent_45%),#1f1e1c]" />
