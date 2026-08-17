@@ -62,9 +62,12 @@ export function ProfileEvents({ events }: { events: RaceEvent[] }) {
           NOTHING HERE YET.
         </p>
       ) : (
-        <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+        <ul className="flex snap-x gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {visible.map((event) => (
-            <li key={event.id} className="rounded-lg bg-white p-4 text-[#1f1e1c]">
+            <li
+              key={event.id}
+              className="w-[260px] flex-none snap-start rounded-lg bg-white p-4 text-[#1f1e1c] sm:w-[280px]"
+            >
               <p className="text-[16px] font-bold uppercase leading-5 break-words">
                 {event.title}
               </p>
