@@ -21,36 +21,20 @@ export function SiteFooter() {
           Submit
         </button>
       </form>
-      <div className="grid grid-cols-2 gap-8 sm:gap-10">
-        <div>
-          <p className="eyebrow mb-4">Explore</p>
-          <ul className="space-y-3 font-display text-lg font-bold uppercase tracking-wide sm:space-y-2 sm:text-xl">
-            <li>
-              <Link href="/signup" className="inline-flex min-h-11 items-center">
-                Create a page
-              </Link>
-            </li>
-            <li>
-              <Link href="/login" className="inline-flex min-h-11 items-center">
-                Athlete login
-              </Link>
-            </li>
-          </ul>
-        </div>
-        <div>
-          <p className="eyebrow mb-4">Social</p>
-          <ul className="space-y-3 font-display text-lg font-bold uppercase tracking-wide sm:space-y-2 sm:text-xl">
-            <li>
-              <span className="text-white/40">Instagram ↗</span>
-            </li>
-            <li>
-              <span className="text-white/40">X ↗</span>
-            </li>
-            <li>
-              <span className="text-white/40">TikTok ↗</span>
-            </li>
-          </ul>
-        </div>
+      <div>
+        <p className="eyebrow mb-4">Explore</p>
+        <ul className="space-y-3 font-display text-lg font-bold uppercase tracking-wide sm:space-y-2 sm:text-xl">
+          <li>
+            <Link href="/signup" className="inline-flex min-h-11 items-center">
+              Create a page
+            </Link>
+          </li>
+          <li>
+            <Link href="/login" className="inline-flex min-h-11 items-center">
+              Athlete login
+            </Link>
+          </li>
+        </ul>
       </div>
       <div className="mt-12 overflow-hidden sm:mt-20">
         <SiteMark size="lg" />
