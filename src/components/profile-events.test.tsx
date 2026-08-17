@@ -127,6 +127,24 @@ describe("ProfileEvents", () => {
     expect(screen.getByText(/nothing here yet/i)).toBeInTheDocument();
   });
 
+  it("shows separate counts for upcoming and past", async () => {
+    const user = userEvent.setup();
+    render(
+      <ProfileEvents
+        events={[
+          makeEvent({ title: "Future 10k", event_date: "2026-09-01" }),
+          makeEvent({ title: "Future Half", event_date: "2026-10-01" }),
+          makeEvent({ title: "Past Marathon", event_date: "2025-02-16" }),
+        ]}
+      />,
+    );
+
+    expect(screen.getByText("2 upcoming events")).toBeInTheDocument();
+    await user.click(screen.getByRole("tab", { name: /^past$/i }));
+    expect(screen.getByText("1 past event")).toBeInTheDocument();
+    expect(screen.queryByText(/upcoming events/)).not.toBeInTheDocument();
+  });
+
   it("shows an event-site link that records the tap", async () => {
     const user = userEvent.setup();
     render(

@@ -38,29 +38,39 @@ export function ProfileEvents({
     ...(about ? [{ key: "about" as Tab, label: "About" }] : []),
   ];
 
+  const count =
+    tab === "about"
+      ? null
+      : tab === "upcoming"
+        ? `${upcoming.length} ${upcoming.length === 1 ? "upcoming event" : "upcoming events"}`
+        : `${past.length} ${past.length === 1 ? "past event" : "past events"}`;
+
   return (
     <section className="flex flex-col gap-3">
-      <div
-        className="glass flex w-full gap-2 rounded-lg p-1 sm:inline-flex sm:w-auto sm:self-start"
-        role="tablist"
-        aria-label="View selector"
-      >
-        {tabs.map(({ key, label }) => (
-          <button
-            key={key}
-            className={`${toggleBtn} ${
-              tab === key
-                ? "bg-accent text-text"
-                : "bg-transparent text-text hover:bg-white/10"
-            }`}
-            type="button"
-            role="tab"
-            aria-selected={tab === key}
-            onClick={() => setTab(key)}
-          >
-            {label}
-          </button>
-        ))}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
+        <div
+          className="glass flex w-full gap-2 rounded-lg p-1 sm:inline-flex sm:w-auto sm:self-start"
+          role="tablist"
+          aria-label="View selector"
+        >
+          {tabs.map(({ key, label }) => (
+            <button
+              key={key}
+              className={`${toggleBtn} ${
+                tab === key
+                  ? "bg-accent text-text"
+                  : "bg-transparent text-text hover:bg-white/10"
+              }`}
+              type="button"
+              role="tab"
+              aria-selected={tab === key}
+              onClick={() => setTab(key)}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+        {count ? <span className="eyebrow sm:pb-1">{count}</span> : null}
       </div>
       {tab === "about" ? (
         <div className="max-w-2xl rounded-lg bg-accent p-5 text-text">
