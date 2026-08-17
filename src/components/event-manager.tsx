@@ -140,7 +140,8 @@ export function EventManager({
           className="field"
           name="event_url"
           inputMode="url"
-          placeholder="Event link (optional)"
+          required
+          placeholder="Event link"
           autoCapitalize="none"
           autoCorrect="off"
           spellCheck={false}
@@ -250,8 +251,9 @@ function EventEditForm({
         className="field"
         name="event_url"
         inputMode="url"
+        required
         defaultValue={event.event_url ?? ""}
-        placeholder="Event link (optional)"
+        placeholder="Event link"
         autoCapitalize="none"
         autoCorrect="off"
         spellCheck={false}

@@ -49,6 +49,7 @@ describe("EventManager", () => {
     await user.type(screen.getByPlaceholderText("Event title"), "  Boston Marathon  ");
     const dateInput = document.querySelector('input[name="event_date"]') as HTMLInputElement;
     await user.type(dateInput, "2026-10-01");
+    await user.type(screen.getByPlaceholderText("Event link"), "https://baa.org");
     await user.click(screen.getByRole("button", { name: /add event/i }));
 
     await waitFor(() => {
@@ -73,6 +74,7 @@ describe("EventManager", () => {
     await user.type(screen.getByPlaceholderText("Event title"), "Bad Race");
     const dateInput = document.querySelector('input[name="event_date"]') as HTMLInputElement;
     await user.type(dateInput, "2026-10-01");
+    await user.type(screen.getByPlaceholderText("Event link"), "https://baa.org");
     await user.click(screen.getByRole("button", { name: /add event/i }));
 
     expect(await screen.findByText("date out of range")).toBeInTheDocument();
@@ -120,6 +122,7 @@ describe("EventManager", () => {
     );
     await user.clear(dateInput);
     await user.type(dateInput, "2030-01-01");
+    await user.type(screen.getByPlaceholderText("Event link"), "https://baa.org");
     await user.click(screen.getByRole("button", { name: /add event/i }));
 
     await waitFor(() => {
@@ -150,7 +153,12 @@ describe("EventManager", () => {
 
   it("edits a race and saves updated fields", async () => {
     const user = userEvent.setup();
-    render(<EventManager athleteId="user-1" events={[makeEvent({})]} />);
+    render(
+      <EventManager
+        athleteId="user-1"
+        events={[makeEvent({ event_url: "https://baa.org/austin" })]}
+      />,
+    );
 
     await user.click(screen.getByRole("button", { name: /edit/i }));
 
@@ -171,7 +179,7 @@ describe("EventManager", () => {
         event_date: "2025-02-16",
         position: "12th OA",
         result: "04:20:00",
-        event_url: null,
+        event_url: "https://baa.org/austin",
       },
     });
     // edit form closes after save
@@ -190,7 +198,7 @@ describe("EventManager", () => {
     const dateInput = document.querySelector('input[name="event_date"]') as HTMLInputElement;
     await user.type(dateInput, "2026-10-01");
     await user.type(
-      screen.getByPlaceholderText("Event link (optional)"),
+      screen.getByPlaceholderText("Event link"),
       "baa.org/boston",
     );
     await user.click(screen.getByRole("button", { name: /add event/i }));
