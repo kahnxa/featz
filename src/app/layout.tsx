@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     template: "%s · featz",
   },
   description:
-    "A race resume for endurance athletes. Upcoming events and past results, in one page.",
+    "A race resume for athletes. Upcoming events and past results, in one page.",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",

@@ -51,7 +51,7 @@ export default async function Home() {
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(1200px_circle_at_20%_0%,rgba(0,0,255,0.28),transparent_55%)]" />
         <div className="relative grid w-full gap-12 lg:mx-auto lg:max-w-6xl lg:grid-cols-[minmax(0,1fr)_400px] lg:items-center lg:gap-20">
           <div>
-            <p className="eyebrow">For runners, cyclists, and triathletes</p>
+            <p className="eyebrow">For athletes</p>
             <h1 className="mt-5 max-w-3xl font-display text-[clamp(2.6rem,12vw,4.5rem)] font-bold uppercase leading-[0.95] tracking-[-0.0104em] sm:text-7xl">
               Your races.
               <br />
