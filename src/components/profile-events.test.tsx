@@ -53,7 +53,7 @@ describe("ProfileEvents", () => {
       />,
     );
 
-    expect(screen.getByRole("tab", { name: /past results/i })).toHaveAttribute(
+    expect(screen.getByRole("tab", { name: /^past$/i })).toHaveAttribute(
       "aria-selected",
       "true",
     );
@@ -78,7 +78,7 @@ describe("ProfileEvents", () => {
 
     expect(screen.queryByText(/04:26:54/)).not.toBeInTheDocument();
 
-    await user.click(screen.getByRole("tab", { name: /past results/i }));
+    await user.click(screen.getByRole("tab", { name: /^past$/i }));
 
     expect(screen.getByText("Past Marathon")).toBeInTheDocument();
     expect(screen.getByText("3rd AG · 04:26:54")).toBeInTheDocument();
@@ -95,7 +95,7 @@ describe("ProfileEvents", () => {
       />,
     );
 
-    await user.click(screen.getByRole("tab", { name: /past results/i }));
+    await user.click(screen.getByRole("tab", { name: /^past$/i }));
     const titles = screen
       .getAllByRole("listitem")
       .map((li) => li.textContent ?? "");
@@ -111,12 +111,26 @@ describe("ProfileEvents", () => {
       />,
     );
 
-    await user.click(screen.getByRole("tab", { name: /past results/i }));
+    await user.click(screen.getByRole("tab", { name: /^past$/i }));
     expect(screen.getByText("Result pending")).toBeInTheDocument();
   });
 
   it("shows an empty state", () => {
     render(<ProfileEvents events={[]} />);
     expect(screen.getByText(/nothing here yet/i)).toBeInTheDocument();
+  });
+
+  it("shows an About tab only when about text exists", async () => {
+    const user = userEvent.setup();
+    const { rerender } = render(<ProfileEvents events={[]} about={null} />);
+    expect(screen.queryByRole("tab", { name: /about/i })).not.toBeInTheDocument();
+
+    rerender(
+      <ProfileEvents events={[]} about={"Training for a sub-3 marathon."} />,
+    );
+    await user.click(screen.getByRole("tab", { name: /about/i }));
+    expect(
+      screen.getByText("Training for a sub-3 marathon."),
+    ).toBeInTheDocument();
   });
 });

@@ -150,7 +150,7 @@ export function EventManager({
         onSave={saveEvent}
       />
       <EventList
-        title="Past results"
+        title="Past"
         items={past}
         onRemove={removeEvent}
         onSave={saveEvent}

@@ -16,6 +16,8 @@ import {
   slugifyName,
 } from "@/lib/utils";
 
+type PhotoEntry = { id: string; path?: string; file?: File; preview: string };
+
 function UnitField({
   unit,
   ...inputProps
@@ -48,25 +50,42 @@ export function ProfileEditor({
     ? cmToFeetInches(profile.height_cm)
     : { feet: 5, inches: 10 };
 
-  const [photoFile, setPhotoFile] = useState<File | null>(null);
-  const [photoError, setPhotoError] = useState<string | null>(null);
-  const preview = useMemo(
-    () => (photoFile ? URL.createObjectURL(photoFile) : null),
-    [photoFile],
-  );
+  const initialPhotos = useMemo<PhotoEntry[]>(() => {
+    const paths = profile.photo_paths?.length
+      ? profile.photo_paths
+      : profile.photo_path
+        ? [profile.photo_path]
+        : [];
+    return paths.map((path) => ({
+      id: path,
+      path,
+      preview: photoUrl(path) || "",
+    }));
+  }, [profile.photo_path, profile.photo_paths]);
 
-  async function onPhotoChange(file: File | null) {
-    if (!file) return;
+  const [photos, setPhotos] = useState<PhotoEntry[]>(initialPhotos);
+  const [photoError, setPhotoError] = useState<string | null>(null);
+
+  async function onPhotosChange(files: FileList | null) {
+    if (!files?.length) return;
     setPhotoError(null);
-    try {
-      setPhotoFile(await preparePhoto(file));
-    } catch (photoErr) {
-      setPhotoError(
-        photoErr instanceof PhotoError
-          ? photoErr.message
-          : "Couldn't read that photo. Try a different one.",
-      );
+    for (const raw of Array.from(files)) {
+      try {
+        const file = await preparePhoto(raw);
+        const preview = URL.createObjectURL(file);
+        setPhotos((prev) => [...prev, { id: preview, file, preview }]);
+      } catch (photoErr) {
+        setPhotoError(
+          photoErr instanceof PhotoError
+            ? photoErr.message
+            : "Couldn't read that photo. Try a different one.",
+        );
+      }
     }
+  }
+
+  function removePhoto(id: string) {
+    setPhotos((prev) => prev.filter((entry) => entry.id !== id));
   }
 
   async function uniqueSlug(supabase: ReturnType<typeof createClient>, base: string) {
@@ -111,19 +130,23 @@ export function ProfileEditor({
       slugifyName(slugInput || first, slugInput ? "" : last),
     );
 
-    let photo_path = profile.photo_path;
-    if (photoFile) {
-      const ext = photoFile.name.split(".").pop() || "jpg";
-      const path = `${profile.id}/${Date.now()}.${ext}`;
+    const photo_paths: string[] = [];
+    for (const [index, entry] of photos.entries()) {
+      if (entry.path) {
+        photo_paths.push(entry.path);
+        continue;
+      }
+      if (!entry.file) continue;
+      const path = `${profile.id}/${Date.now()}-${index}.jpg`;
       const { error: uploadError } = await supabase.storage
         .from("avatars")
-        .upload(path, photoFile, { upsert: true });
+        .upload(path, entry.file, { upsert: true });
       if (uploadError) {
         setError(uploadError.message);
         setPending(false);
         return;
       }
-      photo_path = path;
+      photo_paths.push(path);
     }
 
     const { error: updateError } = await supabase
@@ -136,7 +159,9 @@ export function ProfileEditor({
         sport: SPORTS.includes(sport) ? sport : null,
         height_cm,
         weight_kg,
-        photo_path,
+        photo_path: photo_paths[0] ?? null,
+        photo_paths,
+        about: emptyToNull(String(formData.get("about") || "")),
         instagram_url: emptyToNull(String(formData.get("instagram_url") || "")),
         youtube_url: emptyToNull(String(formData.get("youtube_url") || "")),
         tiktok_url: emptyToNull(String(formData.get("tiktok_url") || "")),
@@ -158,33 +183,63 @@ export function ProfileEditor({
   return (
     <form action={onSubmit} className="space-y-8">
       <section className="space-y-3">
-        <p className="eyebrow">Photo</p>
-        <label className="block w-full cursor-pointer overflow-hidden rounded-lg bg-surface">
-          <div className="aspect-[4/5] w-full bg-surface-2">
-            {preview || profile.photo_path ? (
-              // eslint-disable-next-line @next/next/no-img-element
+        <p className="eyebrow">Photos</p>
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+          {photos.map((entry, index) => (
+            <div
+              key={entry.id}
+              className="relative aspect-[4/5] overflow-hidden rounded-lg bg-surface-2"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={preview || photoUrl(profile.photo_path) || ""}
+                src={entry.preview}
                 alt=""
-                className="h-full w-full object-cover object-[62%_center]"
+                className="h-full w-full object-cover object-center"
               />
-            ) : (
-              <div className="grid h-full place-items-center px-6 text-center uppercase text-muted">
-                Tap to upload
-              </div>
-            )}
-          </div>
-          <input
-            className="hidden"
-            type="file"
-            accept="image/*"
-            onChange={(event) => onPhotoChange(event.target.files?.[0] || null)}
-          />
-        </label>
+              {index === 0 ? (
+                <span className="absolute left-2 top-2 rounded bg-black/60 px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.1em] text-text">
+                  Cover
+                </span>
+              ) : null}
+              <button
+                type="button"
+                aria-label="Remove photo"
+                className="absolute right-2 top-2 grid h-8 w-8 place-items-center rounded bg-black/60 font-mono text-[14px] text-text transition-opacity hover:opacity-70"
+                onClick={() => removePhoto(entry.id)}
+              >
+                ×
+              </button>
+            </div>
+          ))}
+          <label className="grid aspect-[4/5] cursor-pointer place-items-center rounded-lg bg-surface text-center uppercase text-muted transition-colors hover:bg-surface-2">
+            + Add photo
+            <input
+              className="hidden"
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={(event) => {
+                onPhotosChange(event.target.files);
+                event.target.value = "";
+              }}
+            />
+          </label>
+        </div>
         {photoError ? (
           <p className="text-sm uppercase text-red-400">{photoError}</p>
         ) : null}
-        <p className="eyebrow">Tap photo to change</p>
+        <p className="eyebrow">The first photo is your cover.</p>
+      </section>
+
+      <section className="space-y-3">
+        <p className="eyebrow">About</p>
+        <textarea
+          className="field min-h-32 resize-y"
+          name="about"
+          defaultValue={profile.about ?? ""}
+          placeholder="What are you training for? Describe your goals."
+          rows={4}
+        />
       </section>
 
       <section className="grid gap-3 sm:grid-cols-2">

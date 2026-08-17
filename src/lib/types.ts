@@ -27,7 +27,9 @@ export type Profile = {
   weight_kg: number | null;
   height_cm: number | null;
   sport: Sport | null;
+  about: string | null;
   photo_path: string | null;
+  photo_paths: string[];
   instagram_url: string | null;
   youtube_url: string | null;
   tiktok_url: string | null;

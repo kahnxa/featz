@@ -79,7 +79,15 @@ export default async function PublicProfilePage({
   const typed = profile as Profile;
   const raceEvents = (events ?? []) as RaceEvent[];
   const nextRace = raceEvents.find((event) => isUpcoming(event.event_date));
-  const image = photoUrl(typed.photo_path);
+  const photos = (
+    typed.photo_paths?.length
+      ? typed.photo_paths
+      : typed.photo_path
+        ? [typed.photo_path]
+        : []
+  )
+    .map((path) => photoUrl(path))
+    .filter((url): url is string => Boolean(url));
   const name = displayName(typed.first_name, typed.last_name);
   const isOwner = user?.id === typed.id;
   const nextRaceLabel = nextRace
@@ -94,24 +102,31 @@ export default async function PublicProfilePage({
       <main className="flex-1 pb-[100px] sm:pb-[120px]">
         <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-3 rounded-lg bg-[rgba(31,30,28,0.5)] p-2 backdrop-blur-[40px] sm:gap-4">
           <section className="relative h-[360px] overflow-hidden rounded-lg bg-surface sm:h-[400px] sm:w-fit sm:max-w-full sm:self-start">
-            {image ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={image}
-                alt={name}
-                fetchPriority="high"
-                className="h-full w-full object-cover object-center sm:w-auto sm:max-w-[min(80vw,640px)]"
-              />
+            {photos.length ? (
+              <div className="flex h-full snap-x snap-mandatory gap-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                {photos.map((src, index) => (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    key={src}
+                    src={src}
+                    alt={index === 0 ? name : ""}
+                    fetchPriority={index === 0 ? "high" : "auto"}
+                    className="h-full w-full flex-none snap-start rounded-lg object-cover object-center sm:w-auto sm:max-w-[min(80vw,640px)]"
+                  />
+                ))}
+              </div>
             ) : (
               <div className="h-full w-full bg-[radial-gradient(circle_at_30%_20%,#0000ff,transparent_45%),#1f1e1c] sm:aspect-[4/5]" />
             )}
             <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0)_60%,rgba(0,0,0,0.5)_100%)] sm:hidden" />
-            <div className="absolute inset-0 flex flex-col justify-end gap-4 p-4 pb-7 sm:hidden">
+            <div className="pointer-events-none absolute inset-0 flex flex-col justify-end gap-4 p-4 pb-7 sm:hidden">
               <div className="flex items-center gap-3">
                 <h1 className="min-w-0 font-display text-[32px] font-bold uppercase leading-none tracking-[-0.0104em]">
                   {name}
                 </h1>
-                <ShareButton slug={typed.slug} />
+                <span className="pointer-events-auto">
+                  <ShareButton slug={typed.slug} />
+                </span>
               </div>
               <p className="max-w-full self-start truncate rounded-md bg-[rgba(67,60,60,0.5)] px-2.5 py-1 font-mono text-[12px] uppercase leading-[18px] tracking-[0.0857em] backdrop-blur-[40px]">
                 {nextRaceLabel}
@@ -135,7 +150,7 @@ export default async function PublicProfilePage({
               Edit your page
             </Link>
           ) : null}
-          <ProfileEvents events={raceEvents} />
+          <ProfileEvents events={raceEvents} about={typed.about} />
         </div>
       </main>
       <SiteFooter />

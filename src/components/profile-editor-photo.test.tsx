@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { PhotoError } from "@/lib/image";
 import type { Profile } from "@/lib/types";
@@ -21,7 +22,7 @@ vi.mock("@/lib/image", async (importOriginal) => {
   return { ...actual, preparePhoto: preparePhotoMock };
 });
 
-function makeProfile(): Profile {
+function makeProfile(overrides: Partial<Profile> = {}): Profile {
   return {
     id: "user-1",
     slug: "user-abc123",
@@ -31,7 +32,9 @@ function makeProfile(): Profile {
     weight_kg: null,
     height_cm: null,
     sport: null,
+    about: null,
     photo_path: null,
+    photo_paths: [],
     instagram_url: null,
     youtube_url: null,
     tiktok_url: null,
@@ -39,6 +42,7 @@ function makeProfile(): Profile {
     onboarding_completed_at: null,
     created_at: "",
     updated_at: "",
+    ...overrides,
   };
 }
 
@@ -56,21 +60,36 @@ describe("ProfileEditor photo picker", () => {
     });
   });
 
-  it("shows a preview once the photo is processed", async () => {
+  it("adds a processed photo with a preview and cover badge", async () => {
     preparePhotoMock.mockResolvedValue(
       new File(["jpeg"], "photo.jpg", { type: "image/jpeg" }),
     );
     render(<ProfileEditor profile={makeProfile()} mode="onboarding" />);
-
-    expect(screen.getByText("Tap to upload")).toBeInTheDocument();
 
     const picked = new File(["raw"], "IMG_1234.HEIC", { type: "image/jpeg" });
     fireEvent.change(photoInput(), { target: { files: [picked] } });
 
     const img = await screen.findByAltText("");
     expect(img).toHaveAttribute("src", "blob:preview-url");
-    expect(screen.queryByText("Tap to upload")).not.toBeInTheDocument();
+    expect(screen.getByText("Cover")).toBeInTheDocument();
     expect(preparePhotoMock).toHaveBeenCalledWith(picked);
+  });
+
+  it("removes a photo", async () => {
+    const user = userEvent.setup();
+    render(
+      <ProfileEditor
+        profile={makeProfile({ photo_paths: ["user-1/a.jpg"] })}
+        mode="dashboard"
+      />,
+    );
+
+    expect(screen.getByText("Cover")).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: /remove photo/i }));
+
+    await waitFor(() => {
+      expect(screen.queryByText("Cover")).not.toBeInTheDocument();
+    });
   });
 
   it("shows photo errors inside the photo section", async () => {
@@ -86,6 +105,6 @@ describe("ProfileEditor photo picker", () => {
     expect(
       await screen.findByText("Photo is too large — keep it under 25 MB."),
     ).toBeInTheDocument();
-    expect(screen.getByText("Tap to upload")).toBeInTheDocument();
+    expect(screen.queryByText("Cover")).not.toBeInTheDocument();
   });
 });

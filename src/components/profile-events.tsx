@@ -5,56 +5,60 @@ import type { RaceEvent } from "@/lib/types";
 import { formatEventDate, formatPosition, isUpcoming } from "@/lib/utils";
 
 const toggleBtn =
-  "flex-1 whitespace-nowrap rounded-md px-2 py-2 text-center font-mono text-[12px] uppercase leading-4 tracking-[0.06em] transition-colors sm:min-w-[100px] sm:px-4 sm:text-[14px] sm:leading-[18px]";
+  "flex-1 whitespace-nowrap rounded-md px-2 py-2 text-center font-mono text-[12px] uppercase leading-4 tracking-[0.06em] transition-colors sm:min-w-[100px] sm:flex-none sm:px-4 sm:text-[14px] sm:leading-[18px]";
 
-export function ProfileEvents({ events }: { events: RaceEvent[] }) {
+type Tab = "upcoming" | "past" | "about";
+
+export function ProfileEvents({
+  events,
+  about,
+}: {
+  events: RaceEvent[];
+  about?: string | null;
+}) {
   const upcoming = events.filter((event) => isUpcoming(event.event_date));
   const past = events
     .filter((event) => !isUpcoming(event.event_date))
     .slice()
     .reverse();
-  const [tab, setTab] = useState<"upcoming" | "past">(
-    upcoming.length ? "upcoming" : "past",
-  );
+  const [tab, setTab] = useState<Tab>(upcoming.length ? "upcoming" : "past");
   const visible = tab === "upcoming" ? upcoming : past;
+
+  const tabs: Array<{ key: Tab; label: string }> = [
+    { key: "upcoming", label: "Upcoming" },
+    { key: "past", label: "Past" },
+    ...(about ? [{ key: "about" as Tab, label: "About" }] : []),
+  ];
 
   return (
     <section className="flex flex-col gap-3">
-      <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:items-end sm:justify-between sm:gap-4 sm:pr-2">
-        <div
-          className="glass flex w-full gap-2 rounded-lg p-1 sm:inline-flex sm:w-auto"
-          role="tablist"
-          aria-label="View selector"
-        >
+      <div
+        className="glass flex w-full gap-2 rounded-lg p-1 sm:inline-flex sm:w-auto sm:self-start"
+        role="tablist"
+        aria-label="View selector"
+      >
+        {tabs.map(({ key, label }) => (
           <button
+            key={key}
             className={`${toggleBtn} ${
-              tab === "upcoming"
+              tab === key
                 ? "bg-accent text-text"
                 : "bg-transparent text-text hover:bg-white/10"
             }`}
             type="button"
             role="tab"
-            aria-selected={tab === "upcoming"}
-            onClick={() => setTab("upcoming")}
+            aria-selected={tab === key}
+            onClick={() => setTab(key)}
           >
-            Upcoming
+            {label}
           </button>
-          <button
-            className={`${toggleBtn} ${
-              tab === "past"
-                ? "bg-accent text-text"
-                : "bg-transparent text-text hover:bg-white/10"
-            }`}
-            type="button"
-            role="tab"
-            aria-selected={tab === "past"}
-            onClick={() => setTab("past")}
-          >
-            Past results
-          </button>
-        </div>
+        ))}
       </div>
-      {visible.length === 0 ? (
+      {tab === "about" ? (
+        <div className="max-w-2xl rounded-lg bg-white p-5 text-[#1f1e1c]">
+          <p className="uppercase leading-relaxed whitespace-pre-line">{about}</p>
+        </div>
+      ) : visible.length === 0 ? (
         <p className="py-16 text-center font-mono text-[14px] text-text/60">
           NOTHING HERE YET.
         </p>
@@ -63,7 +67,7 @@ export function ProfileEvents({ events }: { events: RaceEvent[] }) {
           {visible.map((event) => (
             <li
               key={event.id}
-              className="w-[260px] flex-none snap-start rounded-lg bg-white p-4 text-[#1f1e1c] sm:w-[280px]"
+              className="w-[calc(50%-4px)] flex-none snap-start rounded-lg bg-white p-4 text-[#1f1e1c] sm:w-[280px]"
             >
               <p className="text-[16px] font-bold uppercase leading-5 break-words">
                 {event.title}
@@ -73,8 +77,9 @@ export function ProfileEvents({ events }: { events: RaceEvent[] }) {
               </p>
               {tab === "past" ? (
                 <p className="mt-3 font-mono text-[14px] uppercase leading-[18px] tracking-[0.0857em] text-accent">
-                  {[formatPosition(event.position), event.result].filter(Boolean).join(" · ") ||
-                    "Result pending"}
+                  {[formatPosition(event.position), event.result]
+                    .filter(Boolean)
+                    .join(" · ") || "Result pending"}
                 </p>
               ) : null}
             </li>
