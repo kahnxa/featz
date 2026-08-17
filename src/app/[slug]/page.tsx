@@ -100,7 +100,7 @@ export default async function PublicProfilePage({
       <SiteHeader user={user} />
       <main className="flex-1 pb-[100px] sm:pb-[120px]">
         <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-3 rounded-lg bg-[rgba(31,30,28,0.5)] p-2 backdrop-blur-[40px] sm:gap-4">
-          <section className="relative h-[360px] overflow-hidden rounded-lg bg-surface sm:aspect-[1424/400] sm:h-auto sm:min-h-[320px] sm:w-full">
+          <section className="relative h-[360px] overflow-hidden rounded-lg sm:aspect-[1424/400] sm:h-auto sm:min-h-[320px] sm:w-full">
             {photos.length ? (
               <PhotoCarousel photos={photos} name={name} />
             ) : (
