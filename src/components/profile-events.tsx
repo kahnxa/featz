@@ -55,7 +55,7 @@ export function ProfileEvents({
         ))}
       </div>
       {tab === "about" ? (
-        <div className="max-w-2xl rounded-lg bg-white p-5 text-[#1f1e1c]">
+        <div className="max-w-2xl rounded-lg bg-accent p-5 text-text">
           <p className="uppercase leading-relaxed whitespace-pre-line">{about}</p>
         </div>
       ) : visible.length === 0 ? (
@@ -67,16 +67,16 @@ export function ProfileEvents({
           {visible.map((event) => (
             <li
               key={event.id}
-              className="w-[calc(50%-4px)] flex-none snap-start rounded-lg bg-white p-4 text-[#1f1e1c] sm:w-[280px]"
+              className="w-[calc(50%-4px)] flex-none snap-start rounded-lg bg-accent p-4 text-text sm:w-[280px]"
             >
               <p className="text-[16px] font-bold uppercase leading-5 break-words">
                 {event.title}
               </p>
-              <p className="mt-2 font-mono text-[12px] uppercase leading-[14px] tracking-[0.1em] text-[#1f1e1c]/50">
+              <p className="mt-2 font-mono text-[12px] uppercase leading-[14px] tracking-[0.1em] text-text/60">
                 {formatEventDate(event.event_date)}
               </p>
               {tab === "past" ? (
-                <p className="mt-3 font-mono text-[14px] uppercase leading-[18px] tracking-[0.0857em] text-accent">
+                <p className="mt-3 font-mono text-[14px] uppercase leading-[18px] tracking-[0.0857em] text-text">
                   {[formatPosition(event.position), event.result]
                     .filter(Boolean)
                     .join(" · ") || "Result pending"}

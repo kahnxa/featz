@@ -23,14 +23,14 @@ function SampleCard() {
           </p>
         </div>
       </div>
-      <div className="absolute right-5 top-5 w-[240px] rounded-lg bg-white p-4 text-[#1f1e1c] shadow-[0_16px_40px_rgba(0,0,0,0.45)]">
+      <div className="absolute right-5 top-5 w-[240px] rounded-lg bg-accent p-4 text-text shadow-[0_16px_40px_rgba(0,0,0,0.45)]">
         <p className="text-[15px] font-bold uppercase leading-5">
           Austin Marathon
         </p>
-        <p className="mt-1 font-mono text-[11px] uppercase leading-[14px] tracking-[0.1em] text-[#1f1e1c]/50">
+        <p className="mt-1 font-mono text-[11px] uppercase leading-[14px] tracking-[0.1em] text-text/60">
           Feb 15, 2026
         </p>
-        <p className="mt-2 font-mono text-[13px] uppercase leading-[18px] tracking-[0.0857em] text-accent">
+        <p className="mt-2 font-mono text-[13px] uppercase leading-[18px] tracking-[0.0857em] text-text">
           3433rd · 04:26:54
         </p>
       </div>

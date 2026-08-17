@@ -160,7 +160,7 @@ export function EventManager({
 }
 
 const rowAction =
-  "grid h-11 w-11 shrink-0 place-items-center text-[#1f1e1c] transition-opacity hover:opacity-70";
+  "grid h-11 w-11 shrink-0 place-items-center text-text transition-opacity hover:opacity-70";
 
 function PencilIcon() {
   return (
@@ -284,17 +284,17 @@ function EventList({
             ) : (
               <li
                 key={event.id}
-                className="relative rounded-lg bg-white p-4 text-[#1f1e1c]"
+                className="relative rounded-lg bg-accent p-4 text-text"
               >
                 <div className="min-w-0">
                   <p className="pr-20 text-[16px] font-bold uppercase leading-5 break-words">
                     {event.title}
                   </p>
-                  <p className="mt-1 font-mono text-[12px] uppercase leading-[14px] tracking-[0.1em] text-[#1f1e1c]/50">
+                  <p className="mt-1 font-mono text-[12px] uppercase leading-[14px] tracking-[0.1em] text-text/60">
                     {formatEventDate(event.event_date)}
                   </p>
                   {event.position || event.result ? (
-                    <p className="mt-2 font-mono text-[14px] uppercase leading-[18px] tracking-[0.0857em] text-accent">
+                    <p className="mt-2 font-mono text-[14px] uppercase leading-[18px] tracking-[0.0857em] text-text">
                       {[formatPosition(event.position), event.result]
                         .filter(Boolean)
                         .join(" · ")}
