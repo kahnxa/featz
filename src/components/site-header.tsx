@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { SiteMark } from "@/components/site-mark";
 
@@ -12,6 +13,7 @@ export function SiteHeader({
 }: {
   user?: { email?: string | null } | null;
 }) {
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
   const lastY = useRef(0);
@@ -47,9 +49,11 @@ export function SiteHeader({
       <nav className="glass relative flex h-12 items-center gap-6 rounded-lg px-4 sm:gap-10 sm:px-6">
         {user ? (
           <>
-            <Link href="/dashboard" className={navLink}>
-              Dashboard
-            </Link>
+            {pathname !== "/dashboard" ? (
+              <Link href="/dashboard" className={navLink}>
+                Dashboard
+              </Link>
+            ) : null}
             <form action="/auth/signout" method="post" className="flex">
               <button className={navLink} type="submit">
                 Log out
