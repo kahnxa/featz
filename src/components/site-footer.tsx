@@ -21,7 +21,7 @@ export function SiteFooter() {
           Submit
         </button>
       </form>
-      <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 sm:gap-10">
+      <div className="grid grid-cols-2 gap-8 sm:gap-10">
         <div>
           <p className="eyebrow mb-4">Explore</p>
           <ul className="space-y-3 font-display text-lg font-bold uppercase tracking-wide sm:space-y-2 sm:text-xl">
@@ -38,14 +38,6 @@ export function SiteFooter() {
           </ul>
         </div>
         <div>
-          <p className="eyebrow mb-4">Company</p>
-          <ul className="space-y-3 font-display text-lg font-bold uppercase tracking-wide sm:space-y-2 sm:text-xl">
-            <li>
-              <span className="text-white/40">Careers</span>
-            </li>
-          </ul>
-        </div>
-        <div className="col-span-2 sm:col-span-1">
           <p className="eyebrow mb-4">Social</p>
           <ul className="space-y-3 font-display text-lg font-bold uppercase tracking-wide sm:space-y-2 sm:text-xl">
             <li>
