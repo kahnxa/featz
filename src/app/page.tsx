@@ -23,7 +23,7 @@ function SampleCard() {
           </p>
         </div>
       </div>
-      <div className="absolute -right-6 -top-6 w-[240px] rounded-lg bg-white p-4 text-[#1f1e1c] shadow-[0_16px_40px_rgba(0,0,0,0.45)]">
+      <div className="absolute left-5 top-5 w-[240px] rounded-lg bg-white p-4 text-[#1f1e1c] shadow-[0_16px_40px_rgba(0,0,0,0.45)]">
         <p className="text-[15px] font-bold uppercase leading-5">
           Austin Marathon
         </p>
@@ -53,9 +53,9 @@ export default async function Home() {
           <div>
             <p className="eyebrow">For athletes</p>
             <h1 className="mt-5 max-w-3xl font-display text-[clamp(2.6rem,12vw,4.5rem)] font-bold uppercase leading-[0.95] tracking-[-0.0104em] sm:text-7xl">
-              Your races.
+              Your athletic
               <br />
-              Your record.
+              resume.
             </h1>
             <p className="mt-6 max-w-md text-[17px] uppercase leading-relaxed text-muted sm:text-lg">
               A public page for the events you have coming up and the results
