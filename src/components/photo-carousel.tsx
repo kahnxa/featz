@@ -27,18 +27,21 @@ export function PhotoCarousel({
 
   useEffect(() => {
     const el = trackRef.current;
-    if (!el) return;
+    if (!el || typeof IntersectionObserver === "undefined") return;
 
-    function onScroll() {
-      if (!el) return;
-      const stride = el.clientWidth + 8; // slide width + gap-2
-      setActive(
-        Math.max(0, Math.min(count - 1, Math.round(el.scrollLeft / stride))),
-      );
-    }
-
-    el.addEventListener("scroll", onScroll, { passive: true });
-    return () => el.removeEventListener("scroll", onScroll);
+    const slides = Array.from(el.children);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            setActive(slides.indexOf(entry.target));
+          }
+        }
+      },
+      { root: el, threshold: 0.6 },
+    );
+    slides.forEach((slide) => observer.observe(slide));
+    return () => observer.disconnect();
   }, [count]);
 
   function goTo(index: number) {
@@ -123,7 +126,7 @@ export function PhotoCarousel({
             aria-label="Previous photo"
             disabled={index === 0}
             onClick={() => step(-1)}
-            className="absolute left-3 top-1/2 z-10 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-full bg-black/45 text-white transition-opacity hover:opacity-80 disabled:opacity-40"
+            className="absolute left-3 top-1/2 z-10 hidden h-9 w-9 -translate-y-1/2 place-items-center rounded-full bg-black/45 text-white transition-opacity hover:opacity-80 disabled:opacity-40 sm:grid"
           >
             <svg viewBox="0 0 9 14" className="h-3.5 w-auto -scale-x-100" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="m1.5 1.5 5.5 5.5-5.5 5.5" />
@@ -134,7 +137,7 @@ export function PhotoCarousel({
             aria-label="Next"
             disabled={index === count - 1}
             onClick={() => step(1)}
-            className="absolute right-3 top-1/2 z-10 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-full bg-black/45 text-white transition-opacity hover:opacity-80 disabled:opacity-40"
+            className="absolute right-3 top-1/2 z-10 hidden h-9 w-9 -translate-y-1/2 place-items-center rounded-full bg-black/45 text-white transition-opacity hover:opacity-80 disabled:opacity-40 sm:grid"
           >
             <svg viewBox="0 0 9 14" className="h-3.5 w-auto" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="m1.5 1.5 5.5 5.5-5.5 5.5" />

@@ -107,13 +107,13 @@ export default async function PublicProfilePage({
               <div className="h-full w-full bg-[radial-gradient(circle_at_30%_20%,#0000ff,transparent_45%),#1f1e1c]" />
             )}
             <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0)_60%,rgba(0,0,0,0.5)_100%)] sm:hidden" />
-            <div className="pointer-events-none absolute inset-0 flex flex-col justify-end gap-4 p-4 pb-7 sm:hidden">
+            <div className="pointer-events-none absolute inset-0 flex flex-col justify-end gap-3 p-4 pb-7 sm:hidden">
               <div className="flex items-center gap-3">
-                <h1 className="min-w-0 font-display text-[32px] font-bold uppercase leading-none tracking-[-0.0104em]">
+                <h1 className="min-w-0 font-display text-[24px] font-bold uppercase leading-none tracking-[-0.0104em]">
                   {name}
                 </h1>
                 <span className="pointer-events-auto">
-                  <ShareButton slug={typed.slug} />
+                  <ShareButton slug={typed.slug} small />
                 </span>
               </div>
               <p className="max-w-full self-start truncate rounded-md bg-[rgba(67,60,60,0.5)] px-2.5 py-1 font-mono text-[12px] uppercase leading-[18px] tracking-[0.0857em] backdrop-blur-[40px]">
