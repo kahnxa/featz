@@ -46,6 +46,8 @@ export type RaceEvent = {
   event_date: string;
   position: string | null;
   result: string | null;
+  event_url: string | null;
+  link_clicks: number;
   created_at: string;
   updated_at: string;
 };

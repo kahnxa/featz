@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { createClient } from "@/lib/supabase/client";
 import type { RaceEvent } from "@/lib/types";
 import { formatEventDate, formatPosition, isUpcoming } from "@/lib/utils";
 
@@ -23,6 +24,13 @@ export function ProfileEvents({
     .reverse();
   const [tab, setTab] = useState<Tab>(upcoming.length ? "upcoming" : "past");
   const visible = tab === "upcoming" ? upcoming : past;
+
+  function trackLinkClick(eventId: string) {
+    // fire-and-forget; never block the navigation
+    createClient()
+      .rpc("track_link_click", { event_id: eventId })
+      .then(undefined, () => {});
+  }
 
   const tabs: Array<{ key: Tab; label: string }> = [
     { key: "upcoming", label: "Upcoming" },
@@ -81,6 +89,17 @@ export function ProfileEvents({
                     .filter(Boolean)
                     .join(" · ") || "Result pending"}
                 </p>
+              ) : null}
+              {event.event_url ? (
+                <a
+                  href={event.event_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => trackLinkClick(event.id)}
+                  className="mt-3 inline-flex min-h-8 items-center font-mono text-[12px] uppercase tracking-[0.1em] text-text underline underline-offset-4 transition-opacity hover:opacity-70"
+                >
+                  Event site ↗
+                </a>
               ) : null}
             </li>
           ))}

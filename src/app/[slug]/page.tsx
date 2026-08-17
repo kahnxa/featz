@@ -102,11 +102,11 @@ export default async function PublicProfilePage({
       <SiteHeader user={user} />
       <main className="flex-1 pb-[100px] sm:pb-[120px]">
         <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-3 rounded-lg bg-[rgba(31,30,28,0.5)] p-2 backdrop-blur-[40px] sm:gap-4">
-          <section className="relative h-[360px] overflow-hidden rounded-lg bg-surface sm:h-[400px] sm:w-fit sm:max-w-full sm:self-start">
+          <section className="relative h-[360px] overflow-hidden rounded-lg bg-surface sm:aspect-[1424/400] sm:h-auto sm:min-h-[320px] sm:w-full">
             {photos.length ? (
               <PhotoCarousel photos={photos} name={name} />
             ) : (
-              <div className="h-full w-full bg-[radial-gradient(circle_at_30%_20%,#0000ff,transparent_45%),#1f1e1c] sm:aspect-[4/5]" />
+              <div className="h-full w-full bg-[radial-gradient(circle_at_30%_20%,#0000ff,transparent_45%),#1f1e1c]" />
             )}
             <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0)_60%,rgba(0,0,0,0.5)_100%)] sm:hidden" />
             <div className="pointer-events-none absolute inset-0 flex flex-col justify-end gap-4 p-4 pb-7 sm:hidden">

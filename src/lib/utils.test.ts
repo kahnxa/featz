@@ -11,6 +11,7 @@ import {
   isUpcoming,
   kgToLbs,
   lbsToKg,
+  normalizeUrl,
   photoUrl,
   slugifyName,
   todayISO,
@@ -166,6 +167,23 @@ describe("formatPosition", () => {
   it("passes through empty values", () => {
     expect(formatPosition(null)).toBeNull();
     expect(formatPosition("")).toBeNull();
+  });
+});
+
+describe("normalizeUrl", () => {
+  it("passes through full URLs", () => {
+    expect(normalizeUrl("https://baa.org/boston")).toBe("https://baa.org/boston");
+    expect(normalizeUrl("http://races.com")).toBe("http://races.com");
+  });
+
+  it("prepends https to bare domains", () => {
+    expect(normalizeUrl("baa.org/boston")).toBe("https://baa.org/boston");
+    expect(normalizeUrl("  utmb.world  ")).toBe("https://utmb.world");
+  });
+
+  it("returns null for blank input", () => {
+    expect(normalizeUrl("")).toBeNull();
+    expect(normalizeUrl("   ")).toBeNull();
   });
 });
 

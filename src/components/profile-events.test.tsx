@@ -4,6 +4,11 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { RaceEvent } from "@/lib/types";
 import { ProfileEvents } from "./profile-events";
 
+const rpcMock = vi.hoisted(() => vi.fn(() => Promise.resolve({ error: null })));
+vi.mock("@/lib/supabase/client", () => ({
+  createClient: () => ({ rpc: rpcMock }),
+}));
+
 function makeEvent(overrides: Partial<RaceEvent>): RaceEvent {
   return {
     id: Math.random().toString(36).slice(2),
@@ -11,6 +16,8 @@ function makeEvent(overrides: Partial<RaceEvent>): RaceEvent {
     title: "Some Race",
     event_date: "2026-01-01",
     position: null,
+    event_url: null,
+    link_clicks: 0,
     result: null,
     created_at: "",
     updated_at: "",
@@ -118,6 +125,29 @@ describe("ProfileEvents", () => {
   it("shows an empty state", () => {
     render(<ProfileEvents events={[]} />);
     expect(screen.getByText(/nothing here yet/i)).toBeInTheDocument();
+  });
+
+  it("shows an event-site link that records the tap", async () => {
+    const user = userEvent.setup();
+    render(
+      <ProfileEvents
+        events={[
+          makeEvent({
+            id: "evt-9",
+            title: "Future 10k",
+            event_date: "2026-09-01",
+            event_url: "https://races.example.com/10k",
+          }),
+        ]}
+      />,
+    );
+
+    const link = screen.getByRole("link", { name: /event site/i });
+    expect(link).toHaveAttribute("href", "https://races.example.com/10k");
+    await user.click(link);
+    expect(rpcMock).toHaveBeenCalledWith("track_link_click", {
+      event_id: "evt-9",
+    });
   });
 
   it("shows an About tab only when about text exists", async () => {

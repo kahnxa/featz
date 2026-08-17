@@ -22,6 +22,8 @@ function makeEvent(overrides: Partial<RaceEvent>): RaceEvent {
     title: "Austin Marathon",
     event_date: "2025-02-16",
     position: null,
+    event_url: null,
+    link_clicks: 0,
     result: "04:26:54",
     created_at: "",
     updated_at: "",
@@ -169,6 +171,7 @@ describe("EventManager", () => {
         event_date: "2025-02-16",
         position: "12th OA",
         result: "04:20:00",
+        event_url: null,
       },
     });
     // edit form closes after save
@@ -177,6 +180,39 @@ describe("EventManager", () => {
         screen.queryByRole("button", { name: /^save$/i }),
       ).not.toBeInTheDocument();
     });
+  });
+
+  it("normalizes and saves the event link", async () => {
+    const user = userEvent.setup();
+    render(<EventManager athleteId="user-1" events={[]} />);
+
+    await user.type(screen.getByPlaceholderText("Event title"), "Boston");
+    const dateInput = document.querySelector('input[name="event_date"]') as HTMLInputElement;
+    await user.type(dateInput, "2026-10-01");
+    await user.type(
+      screen.getByPlaceholderText("Event link (optional)"),
+      "baa.org/boston",
+    );
+    await user.click(screen.getByRole("button", { name: /add event/i }));
+
+    await waitFor(() => {
+      expect(supabase.state.eventInserts).toHaveLength(1);
+    });
+    expect(supabase.state.eventInserts[0].event_url).toBe(
+      "https://baa.org/boston",
+    );
+  });
+
+  it("shows the link tap count when a link is set", () => {
+    render(
+      <EventManager
+        athleteId="user-1"
+        events={[
+          makeEvent({ event_url: "https://baa.org/boston", link_clicks: 12 }),
+        ]}
+      />,
+    );
+    expect(screen.getByText(/12 link taps/i)).toBeInTheDocument();
   });
 
   it("cancels an edit without saving", async () => {

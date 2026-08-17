@@ -8,6 +8,7 @@ import {
   formatEventDate,
   formatPosition,
   isUpcoming,
+  normalizeUrl,
   todayISO,
 } from "@/lib/utils";
 
@@ -44,6 +45,7 @@ export function EventManager({
     const result = future
       ? null
       : String(formData.get("result") || "").trim() || null;
+    const event_url = normalizeUrl(String(formData.get("event_url") || ""));
 
     const { error: insertError } = await supabase.from("events").insert({
       athlete_id: athleteId,
@@ -51,6 +53,7 @@ export function EventManager({
       event_date,
       position,
       result,
+      event_url,
     });
 
     if (insertError) {
@@ -73,10 +76,11 @@ export function EventManager({
     const result = future
       ? null
       : String(formData.get("result") || "").trim() || null;
+    const event_url = normalizeUrl(String(formData.get("event_url") || ""));
 
     const { error: updateError } = await supabase
       .from("events")
-      .update({ title, event_date, position, result })
+      .update({ title, event_date, position, result, event_url })
       .eq("id", id);
 
     if (updateError) {
@@ -131,6 +135,15 @@ export function EventManager({
           spellCheck={false}
           inputMode="decimal"
           disabled={addIsFuture}
+        />
+        <input
+          className="field"
+          name="event_url"
+          inputMode="url"
+          placeholder="Event link (optional)"
+          autoCapitalize="none"
+          autoCorrect="off"
+          spellCheck={false}
         />
         {error ? <p className="text-sm uppercase text-red-400">{error}</p> : null}
         <button className="btn btn-accent h-12 w-full text-sm" type="submit">
@@ -233,6 +246,16 @@ function EventEditForm({
         inputMode="decimal"
         disabled={future}
       />
+      <input
+        className="field"
+        name="event_url"
+        inputMode="url"
+        defaultValue={event.event_url ?? ""}
+        placeholder="Event link (optional)"
+        autoCapitalize="none"
+        autoCorrect="off"
+        spellCheck={false}
+      />
       <div className="flex gap-2">
         <button className="btn btn-accent h-11 flex-1 text-[12px]" type="submit">
           Save
@@ -298,6 +321,13 @@ function EventList({
                       {[formatPosition(event.position), event.result]
                         .filter(Boolean)
                         .join(" · ")}
+                    </p>
+                  ) : null}
+                  {event.event_url ? (
+                    <p className="mt-2 font-mono text-[12px] uppercase leading-[14px] tracking-[0.1em] text-text/60">
+                      {event.link_clicks === 1
+                        ? "1 link tap"
+                        : `${event.link_clicks} link taps`}
                     </p>
                   ) : null}
                 </div>

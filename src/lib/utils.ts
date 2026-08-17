@@ -65,6 +65,12 @@ export function formatPosition(position: string | null | undefined) {
   return `${trimmed}${suffix}`;
 }
 
+export function normalizeUrl(value: string) {
+  const trimmed = value.trim();
+  if (!trimmed) return null;
+  return /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+}
+
 export function emptyToNull(value: string) {
   const trimmed = value.trim();
   return trimmed.length ? trimmed : null;
