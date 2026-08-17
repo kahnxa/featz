@@ -82,37 +82,48 @@ export function ProfileEvents({
         </p>
       ) : (
         <ul className="flex snap-x gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          {visible.map((event) => (
-            <li
-              key={event.id}
-              className="w-[calc(50%-4px)] flex-none snap-start rounded-lg bg-accent p-4 text-text sm:w-[280px]"
-            >
-              <p className="text-[16px] font-bold uppercase leading-5 break-words">
-                {event.title}
-              </p>
-              <p className="mt-2 font-mono text-[12px] uppercase leading-[14px] tracking-[0.1em] text-text/60">
-                {formatEventDate(event.event_date)}
-              </p>
-              {tab === "past" ? (
-                <p className="mt-3 font-mono text-[14px] uppercase leading-[18px] tracking-[0.0857em] text-text">
-                  {[formatPosition(event.position), event.result]
-                    .filter(Boolean)
-                    .join(" · ") || "Result pending"}
+          {visible.map((event) => {
+            const body = (
+              <>
+                <p className="text-[16px] font-bold uppercase leading-5 break-words">
+                  {event.title}
                 </p>
-              ) : null}
-              {event.event_url ? (
-                <a
-                  href={event.event_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => trackLinkClick(event.id)}
-                  className="mt-3 inline-flex min-h-8 items-center font-mono text-[12px] uppercase tracking-[0.1em] text-text underline underline-offset-4 transition-opacity hover:opacity-70"
-                >
-                  Event site ↗
-                </a>
-              ) : null}
-            </li>
-          ))}
+                <p className="mt-2 font-mono text-[12px] uppercase leading-[14px] tracking-[0.1em] text-text/60">
+                  {formatEventDate(event.event_date)}
+                </p>
+                {tab === "past" ? (
+                  <p className="mt-3 font-mono text-[14px] uppercase leading-[18px] tracking-[0.0857em] text-text">
+                    {[formatPosition(event.position), event.result]
+                      .filter(Boolean)
+                      .join(" · ") || "Result pending"}
+                  </p>
+                ) : null}
+              </>
+            );
+
+            return (
+              <li
+                key={event.id}
+                className="w-[calc(50%-4px)] flex-none snap-start sm:w-[280px]"
+              >
+                {event.event_url ? (
+                  <a
+                    href={event.event_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => trackLinkClick(event.id)}
+                    className="block h-full rounded-lg bg-accent p-4 text-text transition-opacity hover:opacity-90"
+                  >
+                    {body}
+                  </a>
+                ) : (
+                  <div className="h-full rounded-lg bg-accent p-4 text-text">
+                    {body}
+                  </div>
+                )}
+              </li>
+            );
+          })}
         </ul>
       )}
     </section>

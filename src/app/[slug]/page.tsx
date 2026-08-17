@@ -32,8 +32,8 @@ export async function generateMetadata({
   const description = `${name} on featz — upcoming races and past results${
     profile.sport ? ` in ${profile.sport}` : ""
   }.`;
-  const image = photoUrl(profile.photo_path);
 
+  // The share image comes from opengraph-image.tsx (photo + featz wordmark).
   return {
     title: name,
     description,
@@ -41,13 +41,11 @@ export async function generateMetadata({
       title: `${name} · featz`,
       description,
       type: "profile",
-      ...(image ? { images: [{ url: image }] } : {}),
     },
     twitter: {
-      card: image ? "summary_large_image" : "summary",
+      card: "summary_large_image",
       title: `${name} · featz`,
       description,
-      ...(image ? { images: [image] } : {}),
     },
   };
 }

@@ -145,7 +145,7 @@ describe("ProfileEvents", () => {
     expect(screen.queryByText(/upcoming events/)).not.toBeInTheDocument();
   });
 
-  it("shows an event-site link that records the tap", async () => {
+  it("makes the whole card a tracked link to the event site", async () => {
     const user = userEvent.setup();
     render(
       <ProfileEvents
@@ -160,12 +160,22 @@ describe("ProfileEvents", () => {
       />,
     );
 
-    const link = screen.getByRole("link", { name: /event site/i });
+    const link = screen.getByRole("link", { name: /future 10k/i });
     expect(link).toHaveAttribute("href", "https://races.example.com/10k");
     await user.click(link);
     expect(rpcMock).toHaveBeenCalledWith("track_link_click", {
       event_id: "evt-9",
     });
+  });
+
+  it("renders cards without a link as plain cards", () => {
+    render(
+      <ProfileEvents
+        events={[makeEvent({ title: "Future 10k", event_date: "2026-09-01" })]}
+      />,
+    );
+    expect(screen.queryByRole("link")).not.toBeInTheDocument();
+    expect(screen.getByText("Future 10k")).toBeInTheDocument();
   });
 
   it("shows an About tab only when about text exists", async () => {
