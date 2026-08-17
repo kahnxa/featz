@@ -24,7 +24,7 @@ export function SiteFooter() {
       <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 sm:gap-10">
         <div>
           <p className="eyebrow mb-4">Explore</p>
-          <ul className="space-y-3 text-lg font-semibold uppercase tracking-wide sm:space-y-2 sm:text-xl">
+          <ul className="space-y-3 font-display text-lg font-bold uppercase tracking-wide sm:space-y-2 sm:text-xl">
             <li>
               <Link href="/signup" className="inline-flex min-h-11 items-center">
                 Create a page
@@ -39,7 +39,7 @@ export function SiteFooter() {
         </div>
         <div>
           <p className="eyebrow mb-4">Company</p>
-          <ul className="space-y-3 text-lg font-semibold uppercase tracking-wide sm:space-y-2 sm:text-xl">
+          <ul className="space-y-3 font-display text-lg font-bold uppercase tracking-wide sm:space-y-2 sm:text-xl">
             <li>
               <span className="text-white/40">Careers</span>
             </li>
@@ -47,7 +47,7 @@ export function SiteFooter() {
         </div>
         <div className="col-span-2 sm:col-span-1">
           <p className="eyebrow mb-4">Social</p>
-          <ul className="space-y-3 text-lg font-semibold uppercase tracking-wide sm:space-y-2 sm:text-xl">
+          <ul className="space-y-3 font-display text-lg font-bold uppercase tracking-wide sm:space-y-2 sm:text-xl">
             <li>
               <span className="text-white/40">Instagram ↗</span>
             </li>

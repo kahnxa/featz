@@ -5,7 +5,7 @@ export default function NotFound() {
     <main className="grid min-h-dvh place-items-center px-[max(1.25rem,env(safe-area-inset-left))] pr-[max(1.25rem,env(safe-area-inset-right))]">
       <div className="text-center">
         <p className="eyebrow">404</p>
-        <h1 className="mt-3 text-4xl font-medium uppercase">Page not found</h1>
+        <h1 className="mt-3 font-display text-4xl font-bold uppercase tracking-[-0.0104em]">Page not found</h1>
         <Link href="/" className="btn btn-accent mt-8 inline-flex h-12 px-6 text-sm">
           Back to featz
         </Link>

@@ -1,26 +1,56 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 import { SiteMark } from "@/components/site-mark";
 
 const navLink =
-  "inline-flex min-h-11 items-center whitespace-nowrap px-2.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-white sm:px-3";
+  "inline-flex h-12 items-center whitespace-nowrap font-mono text-[12px] uppercase tracking-[0.0857em] text-text transition-opacity hover:opacity-70 sm:text-[14px]";
 
 export function SiteHeader({
   user,
 }: {
   user?: { email?: string | null } | null;
 }) {
+  const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const lastY = useRef(0);
+
+  useEffect(() => {
+    function onScroll() {
+      const y = window.scrollY;
+      setScrolled(y > 8);
+      if (y > 96 && y > lastY.current + 4) setHidden(true);
+      else if (y < lastY.current - 4 || y <= 96) setHidden(false);
+      lastY.current = y;
+    }
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <header className="pointer-events-none fixed inset-x-0 top-0 z-30 flex items-start justify-between gap-2 pb-2 pl-[max(0.75rem,env(safe-area-inset-left))] pr-[max(0.75rem,env(safe-area-inset-right))] pt-[max(0.75rem,env(safe-area-inset-top))] sm:pl-[max(1rem,env(safe-area-inset-left))] sm:pr-[max(1rem,env(safe-area-inset-right))] sm:pt-[max(1rem,env(safe-area-inset-top))]">
-      <div className="pointer-events-auto glass shrink-0 rounded-2xl px-3 py-2">
+    <header
+      className={`fixed inset-x-0 top-0 z-30 flex items-center justify-between gap-2 pb-2 pl-[max(1rem,env(safe-area-inset-left))] pr-[max(1rem,env(safe-area-inset-right))] pt-[max(1rem,env(safe-area-inset-top))] transition-transform duration-300 ease-[cubic-bezier(.4,0,.2,1)] ${
+        hidden ? "-translate-y-full" : "translate-y-0"
+      }`}
+    >
+      <div
+        aria-hidden
+        className={`pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.85)_0%,rgba(0,0,0,0)_100%)] transition-opacity duration-200 ${
+          scrolled ? "opacity-100" : "opacity-0"
+        }`}
+      />
+      <div className="glass relative flex h-12 shrink-0 items-center rounded-lg px-4">
         <SiteMark size="sm" />
       </div>
-      <nav className="pointer-events-auto glass flex shrink items-center rounded-2xl px-1 py-1 sm:px-1.5">
+      <nav className="glass relative flex h-12 items-center gap-6 rounded-lg px-4 sm:gap-10 sm:px-6">
         {user ? (
           <>
             <Link href="/dashboard" className={navLink}>
               Dashboard
             </Link>
-            <form action="/auth/signout" method="post">
+            <form action="/auth/signout" method="post" className="flex">
               <button className={navLink} type="submit">
                 Log out
               </button>
@@ -31,10 +61,7 @@ export function SiteHeader({
             <Link href="/login" className={navLink}>
               Log in
             </Link>
-            <Link
-              href="/signup"
-              className="inline-flex min-h-11 items-center whitespace-nowrap rounded-xl bg-accent px-3 text-[11px] font-bold uppercase tracking-[0.08em] text-white"
-            >
+            <Link href="/signup" className={navLink}>
               Join
             </Link>
           </>

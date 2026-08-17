@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
+import { PhotoError, preparePhoto } from "@/lib/image";
 import { createClient } from "@/lib/supabase/client";
 import { SPORTS, type Profile, type Sport } from "@/lib/types";
 import {
@@ -14,6 +15,23 @@ import {
   photoUrl,
   slugifyName,
 } from "@/lib/utils";
+
+function UnitField({
+  unit,
+  ...inputProps
+}: { unit: string } & React.ComponentProps<"input">) {
+  return (
+    <div className="relative min-w-0">
+      <input {...inputProps} className="field pr-12" />
+      <span
+        aria-hidden
+        className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 font-mono text-[12px] uppercase tracking-[0.1em] text-muted"
+      >
+        {unit}
+      </span>
+    </div>
+  );
+}
 
 export function ProfileEditor({
   profile,
@@ -31,10 +49,25 @@ export function ProfileEditor({
     : { feet: 5, inches: 10 };
 
   const [photoFile, setPhotoFile] = useState<File | null>(null);
+  const [photoError, setPhotoError] = useState<string | null>(null);
   const preview = useMemo(
     () => (photoFile ? URL.createObjectURL(photoFile) : null),
     [photoFile],
   );
+
+  async function onPhotoChange(file: File | null) {
+    if (!file) return;
+    setPhotoError(null);
+    try {
+      setPhotoFile(await preparePhoto(file));
+    } catch (photoErr) {
+      setPhotoError(
+        photoErr instanceof PhotoError
+          ? photoErr.message
+          : "Couldn't read that photo. Try a different one.",
+      );
+    }
+  }
 
   async function uniqueSlug(supabase: ReturnType<typeof createClient>, base: string) {
     let candidate = isReservedSlug(base) ? `${base}-athlete` : base;
@@ -126,8 +159,8 @@ export function ProfileEditor({
     <form action={onSubmit} className="space-y-8">
       <section className="space-y-3">
         <p className="eyebrow">Photo</p>
-        <label className="block cursor-pointer overflow-hidden rounded-2xl bg-surface">
-          <div className="aspect-[4/5] max-h-[min(70dvh,28rem)] bg-surface-2">
+        <label className="block w-full cursor-pointer overflow-hidden rounded-lg bg-surface">
+          <div className="aspect-[4/5] w-full bg-surface-2">
             {preview || profile.photo_path ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
@@ -136,7 +169,7 @@ export function ProfileEditor({
                 className="h-full w-full object-cover object-[62%_center]"
               />
             ) : (
-              <div className="grid h-full place-items-center px-6 text-center text-muted">
+              <div className="grid h-full place-items-center px-6 text-center uppercase text-muted">
                 Tap to upload
               </div>
             )}
@@ -145,9 +178,12 @@ export function ProfileEditor({
             className="hidden"
             type="file"
             accept="image/*"
-            onChange={(event) => setPhotoFile(event.target.files?.[0] || null)}
+            onChange={(event) => onPhotoChange(event.target.files?.[0] || null)}
           />
         </label>
+        {photoError ? (
+          <p className="text-sm uppercase text-red-400">{photoError}</p>
+        ) : null}
         <p className="eyebrow">Tap photo to change</p>
       </section>
 
@@ -182,7 +218,7 @@ export function ProfileEditor({
           placeholder="Age"
         />
         <select
-          className="field"
+          className="field uppercase"
           name="sport"
           required
           defaultValue={profile.sport ?? "running"}
@@ -208,7 +244,7 @@ export function ProfileEditor({
         <div className="mb-3 flex items-center justify-between gap-3">
           <p className="eyebrow">Body</p>
           <button
-            className="inline-flex min-h-11 items-center text-[11px] font-semibold uppercase tracking-[0.14em] text-white"
+            className="inline-flex min-h-11 items-center font-mono text-[12px] uppercase tracking-[0.0857em] text-text transition-opacity hover:opacity-70"
             type="button"
             onClick={() => setImperial((value) => !value)}
           >
@@ -216,9 +252,9 @@ export function ProfileEditor({
           </button>
         </div>
         {imperial ? (
-          <div className="grid grid-cols-3 gap-2 sm:gap-3">
-            <input
-              className="field"
+          <div key="imperial" className="grid grid-cols-3 gap-2 sm:gap-3">
+            <UnitField
+              unit="ft"
               name="feet"
               type="number"
               inputMode="numeric"
@@ -227,8 +263,8 @@ export function ProfileEditor({
               defaultValue={initialHeight.feet}
               placeholder="Ft"
             />
-            <input
-              className="field"
+            <UnitField
+              unit="in"
               name="inches"
               type="number"
               inputMode="numeric"
@@ -237,8 +273,8 @@ export function ProfileEditor({
               defaultValue={initialHeight.inches}
               placeholder="In"
             />
-            <input
-              className="field"
+            <UnitField
+              unit="lbs"
               name="lbs"
               type="number"
               inputMode="numeric"
@@ -249,22 +285,22 @@ export function ProfileEditor({
             />
           </div>
         ) : (
-          <div className="grid grid-cols-2 gap-3">
-            <input
-              className="field"
+          <div key="metric" className="grid grid-cols-2 gap-3">
+            <UnitField
+              unit="cm"
               name="height_cm"
               type="number"
               inputMode="decimal"
               defaultValue={profile.height_cm ?? ""}
-              placeholder="Height cm"
+              placeholder="Height"
             />
-            <input
-              className="field"
+            <UnitField
+              unit="kg"
               name="weight_kg"
               type="number"
               inputMode="decimal"
               defaultValue={profile.weight_kg ?? ""}
-              placeholder="Weight kg"
+              placeholder="Weight"
             />
           </div>
         )}
@@ -314,7 +350,7 @@ export function ProfileEditor({
         />
       </section>
 
-      {error ? <p className="text-sm text-red-400">{error}</p> : null}
+      {error ? <p className="text-sm uppercase text-red-400">{error}</p> : null}
       <button
         className="btn btn-accent h-12 w-full text-sm"
         disabled={pending}

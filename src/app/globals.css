@@ -1,13 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  --bg: #000000;
-  --text: #ffffff;
-  --muted: #a0a0a0;
-  --surface: #1a1a1a;
-  --surface-2: #2a2a2a;
+  --bg: #1f1e1c;
+  --text: #faf8f5;
+  --muted: #a6a6a6;
+  --surface: #2a2926;
+  --surface-2: #464444;
   --accent: #0000ff;
-  --line: rgba(255, 255, 255, 0.08);
+  --line: #494847;
+  --glass: rgba(67, 60, 60, 0.5);
 }
 
 @theme inline {
@@ -18,8 +19,12 @@
   --color-surface-2: var(--surface-2);
   --color-accent: var(--accent);
   --color-line: var(--line);
-  --font-sans: var(--font-satoshi), "Satoshi", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-ibm), "IBM Plex Mono", ui-monospace, monospace;
+  --color-glass: var(--glass);
+  --font-sans: var(--font-roboto), Roboto, ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-roboto-condensed), "Roboto Condensed", Roboto,
+    ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-roboto-mono), "Roboto Mono", ui-monospace,
+    SFMono-Regular, Menlo, monospace;
 }
 
 * {
@@ -50,17 +55,6 @@ body {
   position: relative;
 }
 
-body::before {
-  content: "";
-  pointer-events: none;
-  position: fixed;
-  inset: 0;
-  z-index: 40;
-  opacity: 0.045;
-  mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
 ::selection {
   background: var(--accent);
   color: #fff;
@@ -76,10 +70,21 @@ label {
   -webkit-tap-highlight-color: transparent;
 }
 
+a,
+select,
+summary,
+[role="button"],
+button:not(:disabled),
+[type="button"]:not(:disabled),
+[type="submit"]:not(:disabled) {
+  cursor: pointer;
+}
+
 .eyebrow {
   font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.18em;
+  font-size: 12px;
+  line-height: 14px;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--muted);
 }
@@ -90,7 +95,7 @@ label {
   background: var(--surface);
   color: var(--text);
   border: 0;
-  border-radius: 6px;
+  border-radius: 8px;
   padding: 0.85rem 1rem;
   font-family: var(--font-mono);
   font-size: 16px;
@@ -111,7 +116,7 @@ label {
 
 select.field {
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' stroke='%23a0a0a0' stroke-width='1.6'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' stroke='%23a6a6a6' stroke-width='1.6'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 1rem center;
   padding-right: 2.5rem;
@@ -126,35 +131,33 @@ input[type="date"].field {
   align-items: center;
   justify-content: center;
   min-height: 48px;
-  border-radius: 6px;
-  font-family: var(--font-sans);
-  font-weight: 700;
-  letter-spacing: 0.08em;
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  letter-spacing: 0.0857em;
   text-transform: uppercase;
-  transition: transform 0.15s ease, filter 0.15s ease, background 0.15s ease;
+  transition: background-color 0.2s ease, opacity 0.15s ease;
 }
 
 .btn:hover {
-  filter: brightness(1.08);
+  opacity: 0.9;
 }
 
 .btn:active {
-  transform: translateY(1px);
+  opacity: 0.8;
 }
 
 .btn-accent {
   background: var(--accent);
-  color: #fff;
+  color: #faf8f5;
 }
 
 .btn-ghost {
-  background: var(--surface-2);
-  color: #fff;
+  background: var(--glass);
+  backdrop-filter: blur(20px);
+  color: #faf8f5;
 }
 
 .glass {
-  background: rgba(0, 0, 0, 0.72);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--glass);
+  backdrop-filter: blur(20px);
 }
-

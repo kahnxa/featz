@@ -1,11 +1,23 @@
 import type { Metadata, Viewport } from "next";
-import { IBM_Plex_Mono } from "next/font/google";
+import { Roboto, Roboto_Condensed, Roboto_Mono } from "next/font/google";
 import "./globals.css";
 
-const ibm = IBM_Plex_Mono({
+const roboto = Roboto({
   subsets: ["latin"],
   weight: ["400", "500", "700"],
-  variable: "--font-ibm",
+  variable: "--font-roboto",
+});
+
+const robotoCondensed = Roboto_Condensed({
+  subsets: ["latin"],
+  weight: ["700"],
+  variable: "--font-roboto-condensed",
+});
+
+const robotoMono = Roboto_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  variable: "--font-roboto-mono",
 });
 
 export const metadata: Metadata = {
@@ -29,23 +41,17 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: "#000000",
+  themeColor: "#1f1e1c",
   colorScheme: "dark",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${ibm.variable} min-h-dvh antialiased`}>
-      <head>
-        <link
-          href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-      <body
-        className="flex min-h-dvh flex-col bg-bg text-text"
-        style={{ fontFamily: "Satoshi, var(--font-satoshi), sans-serif" }}
-      >
+    <html
+      lang="en"
+      className={`${roboto.variable} ${robotoCondensed.variable} ${robotoMono.variable} min-h-dvh antialiased`}
+    >
+      <body className="flex min-h-dvh flex-col bg-bg font-sans text-text">
         {children}
       </body>
     </html>

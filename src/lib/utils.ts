@@ -52,6 +52,19 @@ export function photoUrl(path: string | null | undefined) {
   return `${base}/storage/v1/object/public/avatars/${path}`;
 }
 
+export function formatPosition(position: string | null | undefined) {
+  if (!position) return null;
+  const trimmed = position.trim();
+  if (!/^\d+$/.test(trimmed)) return trimmed;
+  const n = Number(trimmed);
+  const tens = n % 100;
+  const suffix =
+    tens >= 11 && tens <= 13
+      ? "th"
+      : { 1: "st", 2: "nd", 3: "rd" }[n % 10] ?? "th";
+  return `${trimmed}${suffix}`;
+}
+
 export function emptyToNull(value: string) {
   const trimmed = value.trim();
   return trimmed.length ? trimmed : null;
@@ -62,10 +75,8 @@ export function feetInchesToCm(feet: number, inches: number) {
 }
 
 export function cmToFeetInches(cm: number) {
-  const totalInches = cm / 2.54;
-  const feet = Math.floor(totalInches / 12);
-  const inches = Math.round(totalInches - feet * 12);
-  return { feet, inches };
+  const totalInches = Math.round(cm / 2.54);
+  return { feet: Math.floor(totalInches / 12), inches: totalInches % 12 };
 }
 
 export function lbsToKg(lbs: number) {

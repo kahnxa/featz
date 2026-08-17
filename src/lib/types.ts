@@ -11,6 +11,8 @@ export const RESERVED_SLUGS = [
   "logout",
   "featz",
   "admin",
+  "forgot-password",
+  "reset-password",
 ] as const;
 
 export type Profile = {

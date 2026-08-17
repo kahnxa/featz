@@ -2,7 +2,10 @@
 
 import { useState } from "react";
 import type { RaceEvent } from "@/lib/types";
-import { formatEventDate, isUpcoming } from "@/lib/utils";
+import { formatEventDate, formatPosition, isUpcoming } from "@/lib/utils";
+
+const toggleBtn =
+  "flex-1 whitespace-nowrap rounded-md px-2 py-2 text-center font-mono text-[12px] uppercase leading-4 tracking-[0.06em] transition-colors sm:min-w-[100px] sm:px-4 sm:text-[14px] sm:leading-[18px]";
 
 export function ProfileEvents({ events }: { events: RaceEvent[] }) {
   const upcoming = events.filter((event) => isUpcoming(event.event_date));
@@ -16,54 +19,68 @@ export function ProfileEvents({ events }: { events: RaceEvent[] }) {
   const visible = tab === "upcoming" ? upcoming : past;
 
   return (
-    <section className="pl-[max(1rem,env(safe-area-inset-left))] pr-[max(1rem,env(safe-area-inset-right))] pb-16">
-      <div className="grid grid-cols-2 gap-2">
-        <button
-          className={`flex min-h-12 items-center justify-center rounded-xl px-2 text-center text-[11px] font-semibold uppercase leading-tight tracking-[0.14em] sm:text-[13px] sm:tracking-widest ${
-            tab === "upcoming" ? "bg-accent text-white" : "bg-surface-2 text-white"
-          }`}
-          type="button"
-          onClick={() => setTab("upcoming")}
+    <section className="flex flex-col gap-3">
+      <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:items-end sm:justify-between sm:gap-4 sm:pr-2">
+        <div
+          className="glass flex w-full gap-2 rounded-lg p-1 sm:inline-flex sm:w-auto"
+          role="tablist"
+          aria-label="View selector"
         >
-          <span className="sm:hidden">Upcoming</span>
-          <span className="hidden sm:inline">Upcoming events</span>
-        </button>
-        <button
-          className={`flex min-h-12 items-center justify-center rounded-xl px-2 text-center text-[11px] font-semibold uppercase leading-tight tracking-[0.14em] sm:text-[13px] sm:tracking-widest ${
-            tab === "past" ? "bg-accent text-white" : "bg-surface-2 text-white"
-          }`}
-          type="button"
-          onClick={() => setTab("past")}
-        >
-          <span className="sm:hidden">Past</span>
-          <span className="hidden sm:inline">Past results</span>
-        </button>
+          <button
+            className={`${toggleBtn} ${
+              tab === "upcoming"
+                ? "bg-accent text-text"
+                : "bg-transparent text-text hover:bg-white/10"
+            }`}
+            type="button"
+            role="tab"
+            aria-selected={tab === "upcoming"}
+            onClick={() => setTab("upcoming")}
+          >
+            Upcoming
+          </button>
+          <button
+            className={`${toggleBtn} ${
+              tab === "past"
+                ? "bg-accent text-text"
+                : "bg-transparent text-text hover:bg-white/10"
+            }`}
+            type="button"
+            role="tab"
+            aria-selected={tab === "past"}
+            onClick={() => setTab("past")}
+          >
+            Past results
+          </button>
+        </div>
+        <span className="eyebrow">
+          {visible.length} {tab === "upcoming" ? "events upcoming" : "results total"}
+        </span>
       </div>
-      <p className="eyebrow mt-6">
-        {visible.length} {tab === "upcoming" ? "events upcoming" : "results total"}
-      </p>
-      <ul className="mt-4 space-y-3">
-        {visible.length === 0 ? (
-          <li className="rounded-2xl bg-surface p-5 text-muted">Nothing here yet.</li>
-        ) : (
-          visible.map((event) => (
-            <li key={event.id} className="rounded-2xl bg-white p-4 text-black sm:p-5">
-              <p className="text-lg font-semibold uppercase leading-tight break-words sm:text-xl">
+      {visible.length === 0 ? (
+        <p className="py-16 text-center font-mono text-[14px] text-text/60">
+          NOTHING HERE YET.
+        </p>
+      ) : (
+        <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+          {visible.map((event) => (
+            <li key={event.id} className="rounded-lg bg-white p-4 text-[#1f1e1c]">
+              <p className="text-[16px] font-bold uppercase leading-5 break-words">
                 {event.title}
               </p>
-              <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.18em] text-black/50">
+              <p className="mt-2 font-mono text-[12px] uppercase leading-[14px] tracking-[0.1em] text-[#1f1e1c]/50">
                 {formatEventDate(event.event_date)}
               </p>
               {tab === "past" ? (
-                <p className="mt-3 text-sm font-medium uppercase tracking-widest text-accent">
-                  {[event.position, event.result].filter(Boolean).join(" · ") ||
+                <p className="mt-3 font-mono text-[14px] uppercase leading-[18px] tracking-[0.0857em] text-accent">
+                  {[formatPosition(event.position), event.result].filter(Boolean).join(" · ") ||
                     "Result pending"}
                 </p>
               ) : null}
             </li>
-          ))
-        )}
-      </ul>
+          ))}
+        </ul>
+      )}
     </section>
   );
 }

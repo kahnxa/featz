@@ -15,12 +15,12 @@ export default async function Home() {
       <main className="relative flex flex-1 flex-col justify-end pb-12 pl-[max(1.25rem,env(safe-area-inset-left))] pr-[max(1.25rem,env(safe-area-inset-right))] pt-[calc(8rem+env(safe-area-inset-top))] sm:pb-16 sm:pl-[max(2rem,env(safe-area-inset-left))] sm:pr-[max(2rem,env(safe-area-inset-right))] sm:pt-44">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(1200px_circle_at_20%_0%,rgba(0,0,255,0.28),transparent_55%)]" />
         <p className="eyebrow relative">For runners, cyclists, and triathletes</p>
-        <h1 className="relative mt-5 max-w-3xl text-[clamp(2.6rem,12vw,4.5rem)] font-medium uppercase leading-[0.92] tracking-tight sm:text-7xl">
+        <h1 className="relative mt-5 max-w-3xl font-display text-[clamp(2.6rem,12vw,4.5rem)] font-bold uppercase leading-[0.95] tracking-[-0.0104em] sm:text-7xl">
           Your races.
           <br />
           Your record.
         </h1>
-        <p className="relative mt-6 max-w-md text-[17px] leading-relaxed text-muted sm:text-lg">
+        <p className="relative mt-6 max-w-md text-[17px] uppercase leading-relaxed text-muted sm:text-lg">
           A public page for the events you have coming up and the results you
           want people to see.
         </p>

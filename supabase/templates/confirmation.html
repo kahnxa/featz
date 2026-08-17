@@ -1,0 +1,33 @@
+<table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="background-color:#1f1e1c;padding:32px 16px;">
+  <tr>
+    <td align="center">
+      <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="max-width:480px;">
+        <tr>
+          <td style="padding:0 0 24px;">
+            <span style="font-family:Arial,Helvetica,sans-serif;font-size:28px;font-weight:bold;color:#faf8f5;letter-spacing:-0.5px;">featz</span>
+          </td>
+        </tr>
+        <tr>
+          <td style="background-color:#2a2926;border-radius:8px;padding:32px;">
+            <h2 style="margin:0 0 16px;font-family:Arial,Helvetica,sans-serif;font-size:22px;line-height:1.2;color:#faf8f5;text-transform:uppercase;letter-spacing:-0.2px;">Confirm your email</h2>
+            <p style="margin:0 0 24px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.6;color:#a6a6a6;">You're one step from your race resume. Confirm this email address to activate your featz account and start building your page.</p>
+            <table cellpadding="0" cellspacing="0" role="presentation">
+              <tr>
+                <td style="background-color:#0000ff;border-radius:8px;">
+                  <a href="{{ .ConfirmationURL }}" target="_blank" style="display:inline-block;padding:14px 32px;font-family:'Courier New',Courier,monospace;font-size:14px;font-weight:bold;letter-spacing:1px;text-transform:uppercase;color:#faf8f5;text-decoration:none;">Confirm email</a>
+                </td>
+              </tr>
+            </table>
+            <p style="margin:24px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.6;color:#a6a6a6;">If the button doesn't work, paste this link into your browser:<br /><a href="{{ .ConfirmationURL }}" target="_blank" style="color:#8f8fff;word-break:break-all;">{{ .ConfirmationURL }}</a></p>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:24px 0 0;">
+            <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#a6a6a6;">featz · your races. your record.</p>
+            <p style="margin:8px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.6;color:#6b6b6b;">Didn't sign up for featz? You can safely ignore this email.</p>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
