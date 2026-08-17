@@ -81,7 +81,7 @@ export function ProfileEvents({
           NOTHING HERE YET.
         </p>
       ) : (
-        <ul className="flex flex-col gap-2">
+        <ul className="grid grid-cols-2 gap-2 sm:grid-cols-[repeat(auto-fill,minmax(280px,1fr))]">
           {visible.map((event) => {
             const body = (
               <>
@@ -102,7 +102,7 @@ export function ProfileEvents({
             );
 
             return (
-              <li key={event.id} className="w-full">
+              <li key={event.id}>
                 {event.event_url ? (
                   <a
                     href={event.event_url}
