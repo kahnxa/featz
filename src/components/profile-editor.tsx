@@ -14,6 +14,8 @@ import {
   lbsToKg,
   photoUrl,
   slugifyName,
+  socialUrl,
+  socialUsername,
 } from "@/lib/utils";
 
 type PhotoEntry = { id: string; path?: string; file?: File; preview: string };
@@ -31,6 +33,30 @@ function UnitField({
       >
         {unit}
       </span>
+    </div>
+  );
+}
+
+function SocialField({ name, ...inputProps }: React.ComponentProps<"input">) {
+  const withAt = name !== "strava";
+  return (
+    <div className="relative min-w-0">
+      {withAt ? (
+        <span
+          aria-hidden
+          className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 font-mono text-[16px] text-muted"
+        >
+          @
+        </span>
+      ) : null}
+      <input
+        {...inputProps}
+        name={name}
+        className={withAt ? "field pl-9" : "field"}
+        autoCapitalize="none"
+        autoCorrect="off"
+        spellCheck={false}
+      />
     </div>
   );
 }
@@ -162,10 +188,10 @@ export function ProfileEditor({
         photo_path: photo_paths[0] ?? null,
         photo_paths,
         about: emptyToNull(String(formData.get("about") || "")),
-        instagram_url: emptyToNull(String(formData.get("instagram_url") || "")),
-        youtube_url: emptyToNull(String(formData.get("youtube_url") || "")),
-        tiktok_url: emptyToNull(String(formData.get("tiktok_url") || "")),
-        strava_url: emptyToNull(String(formData.get("strava_url") || "")),
+        instagram_url: socialUrl("instagram", String(formData.get("instagram") || "")),
+        youtube_url: socialUrl("youtube", String(formData.get("youtube") || "")),
+        tiktok_url: socialUrl("tiktok", String(formData.get("tiktok") || "")),
+        strava_url: socialUrl("strava", String(formData.get("strava") || "")),
         onboarding_completed_at: new Date().toISOString(),
       })
       .eq("id", profile.id);
@@ -362,46 +388,26 @@ export function ProfileEditor({
       </section>
 
       <section className="space-y-3">
-        <p className="eyebrow">Socials — only filled links show</p>
-        <input
-          className="field"
-          name="instagram_url"
-          inputMode="url"
-          defaultValue={profile.instagram_url ?? ""}
-          placeholder="Instagram URL"
-          autoCapitalize="none"
-          autoCorrect="off"
-          spellCheck={false}
+        <p className="eyebrow">Socials — usernames only, we build the links</p>
+        <SocialField
+          name="instagram"
+          defaultValue={socialUsername(profile.instagram_url)}
+          placeholder="Instagram username"
         />
-        <input
-          className="field"
-          name="youtube_url"
-          inputMode="url"
-          defaultValue={profile.youtube_url ?? ""}
-          placeholder="YouTube URL"
-          autoCapitalize="none"
-          autoCorrect="off"
-          spellCheck={false}
+        <SocialField
+          name="youtube"
+          defaultValue={socialUsername(profile.youtube_url)}
+          placeholder="YouTube handle"
         />
-        <input
-          className="field"
-          name="tiktok_url"
-          inputMode="url"
-          defaultValue={profile.tiktok_url ?? ""}
-          placeholder="TikTok URL"
-          autoCapitalize="none"
-          autoCorrect="off"
-          spellCheck={false}
+        <SocialField
+          name="tiktok"
+          defaultValue={socialUsername(profile.tiktok_url)}
+          placeholder="TikTok username"
         />
-        <input
-          className="field"
-          name="strava_url"
-          inputMode="url"
-          defaultValue={profile.strava_url ?? ""}
-          placeholder="Strava URL"
-          autoCapitalize="none"
-          autoCorrect="off"
-          spellCheck={false}
+        <SocialField
+          name="strava"
+          defaultValue={socialUsername(profile.strava_url)}
+          placeholder="Strava athlete ID or profile link"
         />
       </section>
 

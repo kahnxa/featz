@@ -71,6 +71,38 @@ export function normalizeUrl(value: string) {
   return /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
 }
 
+export type SocialPlatform = "instagram" | "youtube" | "tiktok" | "strava";
+
+const SOCIAL_URL_BUILDERS: Record<SocialPlatform, (username: string) => string> = {
+  instagram: (username) => `https://instagram.com/${username}`,
+  youtube: (username) => `https://youtube.com/@${username}`,
+  tiktok: (username) => `https://tiktok.com/@${username}`,
+  strava: (username) => `https://www.strava.com/athletes/${username}`,
+};
+
+export function socialUsername(value: string | null | undefined) {
+  const stripped = (value ?? "")
+    .trim()
+    .replace(/^https?:\/\//i, "")
+    .replace(/^www\./i, "")
+    .split(/[?#]/)[0];
+  const segments = stripped.split("/").filter(Boolean);
+  if (segments.length > 1 && segments[0].includes(".")) segments.shift();
+  else if (
+    segments.length === 1 &&
+    /^(instagram|youtube|tiktok|strava)\.com$/i.test(segments[0])
+  )
+    return "";
+  const handle =
+    segments.filter((segment) => segment.toLowerCase() !== "athletes").pop() ?? "";
+  return handle.replace(/^@/, "");
+}
+
+export function socialUrl(platform: SocialPlatform, value: string) {
+  const username = socialUsername(value);
+  return username ? SOCIAL_URL_BUILDERS[platform](username) : null;
+}
+
 export function emptyToNull(value: string) {
   const trimmed = value.trim();
   return trimmed.length ? trimmed : null;

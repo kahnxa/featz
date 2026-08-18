@@ -138,14 +138,19 @@ describe("ProfileEditor onboarding submit", () => {
     expect(supabase.state.profileUpdates[0].slug).toBe("dashboard-athlete");
   });
 
-  it("nulls out blank social fields and keeps filled ones", async () => {
+  it("builds social links from usernames and nulls out blank fields", async () => {
     const user = userEvent.setup();
     render(<ProfileEditor profile={makeProfile()} mode="onboarding" />);
 
     await fillRequiredFields(user);
+    await user.type(screen.getByPlaceholderText("Instagram username"), "xavier");
     await user.type(
-      screen.getByPlaceholderText("Instagram URL"),
-      "https://instagram.com/xavier",
+      screen.getByPlaceholderText("TikTok username"),
+      "https://www.tiktok.com/@xavier.k",
+    );
+    await user.type(
+      screen.getByPlaceholderText("Strava athlete ID or profile link"),
+      "12345",
     );
     await user.click(screen.getByRole("button", { name: /publish page/i }));
 
@@ -155,8 +160,24 @@ describe("ProfileEditor onboarding submit", () => {
     const update = supabase.state.profileUpdates[0];
     expect(update.instagram_url).toBe("https://instagram.com/xavier");
     expect(update.youtube_url).toBeNull();
-    expect(update.tiktok_url).toBeNull();
-    expect(update.strava_url).toBeNull();
+    expect(update.tiktok_url).toBe("https://tiktok.com/@xavier.k");
+    expect(update.strava_url).toBe("https://www.strava.com/athletes/12345");
+  });
+
+  it("prefills social fields with the username from a stored link", () => {
+    render(
+      <ProfileEditor
+        profile={makeProfile({
+          instagram_url: "https://instagram.com/xavier",
+          youtube_url: "https://youtube.com/@xavier",
+        })}
+        mode="dashboard"
+      />,
+    );
+
+    expect(screen.getByPlaceholderText("Instagram username")).toHaveValue("xavier");
+    expect(screen.getByPlaceholderText("YouTube handle")).toHaveValue("xavier");
+    expect(screen.getByPlaceholderText("TikTok username")).toHaveValue("");
   });
 
   it("surfaces save errors instead of navigating", async () => {

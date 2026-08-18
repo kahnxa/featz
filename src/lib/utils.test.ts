@@ -14,6 +14,8 @@ import {
   normalizeUrl,
   photoUrl,
   slugifyName,
+  socialUrl,
+  socialUsername,
   todayISO,
 } from "./utils";
 
@@ -167,6 +169,59 @@ describe("formatPosition", () => {
   it("passes through empty values", () => {
     expect(formatPosition(null)).toBeNull();
     expect(formatPosition("")).toBeNull();
+  });
+});
+
+describe("socialUsername", () => {
+  it("keeps a bare username, stripping a leading @", () => {
+    expect(socialUsername("xavier")).toBe("xavier");
+    expect(socialUsername("@xavier")).toBe("xavier");
+    expect(socialUsername("  @xavier  ")).toBe("xavier");
+  });
+
+  it("keeps dots in usernames", () => {
+    expect(socialUsername("john.smith")).toBe("john.smith");
+  });
+
+  it("extracts the username from a pasted profile link", () => {
+    expect(socialUsername("https://www.instagram.com/xavier")).toBe("xavier");
+    expect(socialUsername("instagram.com/xavier/")).toBe("xavier");
+    expect(socialUsername("https://www.tiktok.com/@xavier.k")).toBe("xavier.k");
+    expect(socialUsername("https://youtube.com/@xavier")).toBe("xavier");
+    expect(socialUsername("https://www.strava.com/athletes/12345")).toBe("12345");
+  });
+
+  it("drops query strings and fragments", () => {
+    expect(socialUsername("instagram.com/xavier?igsh=abc")).toBe("xavier");
+  });
+
+  it("returns empty for blanks and bare domains", () => {
+    expect(socialUsername("")).toBe("");
+    expect(socialUsername(null)).toBe("");
+    expect(socialUsername("instagram.com")).toBe("");
+    expect(socialUsername("https://www.strava.com/athletes")).toBe("");
+  });
+});
+
+describe("socialUrl", () => {
+  it("builds each platform's profile link from a username", () => {
+    expect(socialUrl("instagram", "xavier")).toBe("https://instagram.com/xavier");
+    expect(socialUrl("youtube", "@xavier")).toBe("https://youtube.com/@xavier");
+    expect(socialUrl("tiktok", "xavier.k")).toBe("https://tiktok.com/@xavier.k");
+    expect(socialUrl("strava", "12345")).toBe(
+      "https://www.strava.com/athletes/12345",
+    );
+  });
+
+  it("normalizes a pasted link instead of double-wrapping it", () => {
+    expect(socialUrl("instagram", "https://www.instagram.com/xavier")).toBe(
+      "https://instagram.com/xavier",
+    );
+  });
+
+  it("returns null for empty input", () => {
+    expect(socialUrl("instagram", "")).toBeNull();
+    expect(socialUrl("strava", "   ")).toBeNull();
   });
 });
 
