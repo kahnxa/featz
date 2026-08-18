@@ -52,7 +52,8 @@ function SocialField({ name, ...inputProps }: React.ComponentProps<"input">) {
       <input
         {...inputProps}
         name={name}
-        className={withAt ? "field pl-9" : "field"}
+        className="field"
+        style={withAt ? { paddingLeft: "2.4rem" } : undefined}
         autoCapitalize="none"
         autoCorrect="off"
         spellCheck={false}
